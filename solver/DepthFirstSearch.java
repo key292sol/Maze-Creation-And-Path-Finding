@@ -1,37 +1,22 @@
 package solver;
 
-import java.util.Random;
 import java.util.Stack;
 
-import generator.*;
 import maze.Maze;
 
-public class DepthFirstSearch extends Maze {
+public class DepthFirstSearch extends MazeSolver {
     Stack<Cell> pathStack = new Stack<>();
-    Cell start, dest;
-    boolean finished = false;
 
     DepthFirstSearch(int size) {
         this(size, size);
     }
 
     DepthFirstSearch(int row, int col) {
-        MazeGenerator gen = new RecursiveBacktrackingAlgorithm(row, col);
-        gen.createWholeMaze();
-        this.blockSize = gen.blockSize;
-        this.maze = gen.maze;
-        
-        Random random = new Random();
-        int startRow = random.nextInt(row), destRow = random.nextInt(row);
-        int startCol = random.nextInt(col), destCol = random.nextInt(col);
-        start = getCellAt(startRow, startCol);
-        start.color = Maze.startCell;
-        pathStack.push(start);
-        dest = getCellAt(destRow, destCol);
-        dest.color = Maze.destColor;
+        super(row, col);
+        pathStack.push(current);
     }
 
-    public void nextIteration() {
+    public Cell nextIteration() {
         if (!pathStack.empty()) {
             Cell last = current;
             if (last != null && last != start) last.color = Maze.visitedColor;
@@ -40,14 +25,14 @@ public class DepthFirstSearch extends Maze {
             
             if (current.neighbors.size() == 0) {
                 pathStack.pop().color = currentCellColor;
-                return;
+                return last;
             }
 
             Cell selected = current.neighbors.remove(0);
             if (selected == dest) {
                 finished = true;
                 pathFound();
-                return;
+                return last;
             }
 
             selected.neighbors.remove(current);
@@ -55,14 +40,16 @@ public class DepthFirstSearch extends Maze {
             // current.color = Maze.visitedColor;
             selected.color = Maze.currentCellColor;
         }
+        return null;
     }
 
     public void pathFound() {
-        while (!pathStack.empty()) {
+        while (pathStack.size() > 1) {
             Cell cell = pathStack.pop();
             cell.isPath = true;
             cell.color = Maze.pathColor;
         }
+        pathStack.pop();
     }
 }
 
