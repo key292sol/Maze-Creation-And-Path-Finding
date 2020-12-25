@@ -22,7 +22,7 @@ public abstract class Maze {
     public abstract Cell nextIteration();
 
     public class Cell {
-        public boolean visited = false, isPath = false;
+        public boolean visited = false;
         public Color color = Color.WHITE;
         public boolean[] walls = { true, true, true, true }; // up right down left
         public int row, col;
