@@ -21,7 +21,12 @@ public class DepthFirstSearch extends MazeSolver {
             Cell last = current;
             if (last != null && last != start) last.color = Maze.visitedColor;
             current = pathStack.peek();
-            if (current != start) current.color = Maze.visitedColor;
+            if (current == dest) {
+                finished = true;
+                pathFound();
+                return null;
+            }
+            if (current != start) current.color = Maze.currentCellColor;
             
             if (current.neighbors.size() == 0) {
                 pathStack.pop().color = currentCellColor;
@@ -29,24 +34,19 @@ public class DepthFirstSearch extends MazeSolver {
             }
 
             Cell selected = current.neighbors.remove(0);
-            if (selected == dest) {
-                finished = true;
-                pathFound();
-                return last;
-            }
 
             selected.neighbors.remove(current);
+            if (selected != dest) selected.color = Maze.visitedColor;
             pathStack.push(selected);
-            // current.color = Maze.visitedColor;
-            selected.color = Maze.currentCellColor;
+            return last;
         }
         return null;
     }
 
     public void pathFound() {
+        pathStack.pop();
         while (pathStack.size() > 1) {
             Cell cell = pathStack.pop();
-            cell.isPath = true;
             cell.color = Maze.pathColor;
         }
         pathStack.pop();
