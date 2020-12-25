@@ -5,18 +5,21 @@ import java.util.Random;
 import java.awt.Graphics;
 import java.awt.Color;
 
-public class Maze {
-    public static int frameWidth = 760, frameHeight = 760;
+public abstract class Maze {
     public static Color visitedColor     = Color.LIGHT_GRAY;
     public static Color notVisitedColor  = Color.WHITE;
     public static Color currentCellColor = Color.YELLOW;
     public static Color pathColor        = Color.GREEN;
     public static Color startCell        = Color.RED;
     public static Color destColor        = Color.BLUE;
+    
+    public static int frameWidth = 760, frameHeight = 760;
 
     public Cell[][] maze;
     public Cell current;
     public int blockSize;
+
+    public abstract Cell nextIteration();
 
     public class Cell {
         public boolean visited = false, isPath = false;
@@ -73,6 +76,11 @@ public class Maze {
         if (r < 0 || c < 0 || r >= maze.length || c >= maze[0].length)
             return null;
         return maze[r][c];
+    }
+
+    public Cell getRandomCell(int rows, int cols) {
+        Random random = new Random();
+        return getCellAt(random.nextInt(rows), random.nextInt(cols));
     }
 
     public void drawCell(Graphics g, Cell cell) {
