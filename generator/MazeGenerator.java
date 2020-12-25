@@ -30,10 +30,8 @@ public abstract class MazeGenerator extends Maze {
             }
         }
 
-        current = maze[random.nextInt(row)][random.nextInt(col)];
+        current = getRandomCell(row, col);
     }
-
-    public abstract Cell nextIteration();
 
     public abstract void createWholeMaze();
 
