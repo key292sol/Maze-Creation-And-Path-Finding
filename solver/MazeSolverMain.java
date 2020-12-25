@@ -3,13 +3,15 @@ package solver;
 import javax.swing.JFrame;
 
 import maze.Maze;
+import maze.Maze.Cell;
 
 import java.awt.Graphics;
 
 public class MazeSolverMain extends JFrame {
     private static final long serialVersionUID = 1L;
-    DepthFirstSearch dfs;
+    MazeSolver solver;
     Maze.Cell start;
+    boolean started = false, finished = false;
 
     MazeSolverMain() {
         setSize(Maze.frameWidth + 25, Maze.frameHeight + 50);
@@ -17,31 +19,51 @@ public class MazeSolverMain extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int gridRows, gridCols = 15;
+        int gridRows, gridCols = 20;
         gridRows = gridCols;
-        dfs = new DepthFirstSearch(gridRows);
+        solver = new DepthFirstSearch(gridRows);
         repaint();
     }
 
     public void paint(Graphics g) {
-        // For showing whole maze
-        if (this.dfs == null) {
+        if (this.solver == null) {
             repaint();
             return;
         }
-        for (Maze.Cell[] cells : dfs.maze) {
-            for (Maze.Cell cell : cells) {
-                dfs.drawCell(g, cell);
+
+        if (!started) {
+            started = true;
+            drawWholeGrid(g);
+            repaint();
+        } else if (!finished) {
+            g.setColor(Maze.visitedColor);
+            solver.drawCell(g, solver.current);
+            Cell last = solver.nextIteration();
+            if (last != null) {
+                solver.drawCell(g, last);
+                solver.drawCell(g, solver.current);
+            } else {
+                finished = true;
             }
+            repaint();
+        } else {
+            drawWholeGrid(g);
         }
 
-        dfs.nextIteration();
         try {
             // Thread.sleep(50);
         } catch (Exception e) {
             
         }
         repaint();
+    }
+
+    public void drawWholeGrid(Graphics g) {
+        for (Maze.Cell[] cells : solver.maze) {
+            for (Maze.Cell cell : cells) {
+                solver.drawCell(g, cell);
+            }
+        }
     }
 
     public static void main(String[] args) {
