@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import maze.Maze;
 
+// Recursuve Backtracking Algorithm is sometimes also known as Random Depth First Search
 public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
     Stack<Cell> cellStack;
 
@@ -25,30 +26,42 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
         setGridNotVisited();
     }
 
+    /*
+     * 1. Store current cell so to redraw it after the current iteration
+     * 2. Get the last cell in the stack
+     * 3. If no neighbors are available then remove the last element from cell (Backtrack)
+     * 4. Get a random neighbor if there are any available
+     * 5. Remove the wall between the current cell and the selected neighbor
+     * 6. Add the cell to the stack
+     * 
+     * If the cellStack is empty then it means we have backtracked till the start point 
+     * Set whole grid as not visited to enable path finding 
+     */
     public Cell nextIteration() {
-        if (!cellStack.isEmpty()) {
-            Cell last = current;
-            last.color = Maze.visitedColor;
-            current = cellStack.peek();
-            Cell selected = current.getRandomNeighbor();
-            if (selected == null) {
-                cellStack.pop();
-                current.color = Maze.currentCellColor;
-                return last;
-            }
+        Cell last  = current;
+        last.color = Maze.VISITED_COLOR;
+        
+        Cell selected = getRandomNeighbor(current);
+        if (selected == null) {
+            cellStack.pop();
 
-            selected.neighbors.remove(current);
-            selected.visited = true;
-            selected.color = Maze.visitedColor;
-            removeWall(selected);
-            cellStack.push(selected);
-            current = selected;
-            current.color = Maze.currentCellColor;
-            return last;
+            if (!cellStack.empty()) {
+                current = cellStack.peek();
+                current.color = Maze.CURR_CELL_COLOR;
+                return last;
+            } else {
+                setGridNotVisited();
+                return null;
+            }
         }
 
-        setGridNotVisited();
-        return null;
+        selected.visited = true;
+        removeWall(selected);
+        selected.neighbors.remove(current);
+        cellStack.push(selected);
+
+        current = selected;
+        current.color = Maze.CURR_CELL_COLOR;
+        return last;
     }
 }
-

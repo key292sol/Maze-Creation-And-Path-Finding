@@ -40,7 +40,7 @@ public class DepthFirstSearch extends MazeSolver {
         Cell selected = current.neighbors.remove(0);
         selected.neighbors.remove(current);
         pathStack.push(selected);
-        
+
         current = selected;
         if (current != start && current != dest)
             current.color = Maze.CURR_CELL_COLOR;
@@ -49,12 +49,11 @@ public class DepthFirstSearch extends MazeSolver {
     }
 
     public void pathFound() {
-        pathStack.pop(); // Popping the destintion node
+        pathStack.pop();                             // Popping the destintion node
         while (pathStack.size() > 1) {
-            Cell cell = pathStack.pop();
-            cell.color = Maze.PATH_COLOR;
+            pathStack.pop().color = Maze.PATH_COLOR; // Popping each node in path and changing its color
         }
-        pathStack.pop(); // Popping the start node from stack
+        pathStack.pop();                             // Popping the start node from stack
     }
 }
 

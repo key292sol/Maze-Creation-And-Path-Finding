@@ -14,6 +14,7 @@ public class MazeSolverMain extends JFrame {
     boolean started = false, finished = false;
 
     MazeSolverMain() {
+        // +25 and +50 because of Frame borders
         setSize(Maze.frameWidth + 25, Maze.frameHeight + 50);
         setVisible(true);
         setLocationRelativeTo(null);
@@ -36,7 +37,7 @@ public class MazeSolverMain extends JFrame {
             drawWholeGrid(g);
             repaint();
         } else if (!finished) {
-            g.setColor(Maze.visitedColor);
+            g.setColor(Maze.VISITED_COLOR);
             solver.drawCell(g, solver.current);
             Cell last = solver.nextIteration();
             if (last != null) {
@@ -51,11 +52,10 @@ public class MazeSolverMain extends JFrame {
         }
 
         try {
-            // Thread.sleep(50);
+            Thread.sleep(100);
         } catch (Exception e) {
             
         }
-        repaint();
     }
 
     public void drawWholeGrid(Graphics g) {

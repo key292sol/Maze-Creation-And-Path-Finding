@@ -12,7 +12,9 @@ public abstract class MazeGenerator extends Maze {
     }
 
     MazeGenerator(int row, int col) {
-        if (Math.max(row, col) < 150)
+        // The blockSize shouldn't be less then 5
+        int maxLength = Math.min(Maze.frameHeight, Maze.frameWidth) / 5;
+        if (Math.max(row, col) < maxLength)
             blockSize = Math.min(Maze.frameHeight, Maze.frameWidth) / Math.max(row, col);
         else
             blockSize = 5;
@@ -26,7 +28,7 @@ public abstract class MazeGenerator extends Maze {
 
         for (Cell[] cells : maze) {
             for (Cell cell : cells) {
-                cell.setInitialNeighbors();
+                setInitialNeighbors(cell);
             }
         }
 
@@ -40,13 +42,15 @@ public abstract class MazeGenerator extends Maze {
         for (Cell[] cells : maze) {
             for (Cell cell : cells) {
                 cell.visited = false;
-                cell.color = Maze.notVisitedColor;
-                cell.setNeighbors();
+                cell.color   = Maze.NOT_VISITED_COLOR;
+                setNeighbors(cell);
             }
         }
     }
 
     public void removeWall(Cell to) {
+        // Checking which wall to remove
+        // OrdeChecking order acc to this.current cell: Top Right Bottom Left
         if (current.row > to.row) {
             current.walls[0] = false;
             to.walls[2]      = false;

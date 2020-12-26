@@ -15,8 +15,8 @@ public abstract class MazeSolver extends Maze {
 
         current = start = getRandomCell(row, col);
         dest = getRandomCell(row, col);
-        start.color = Maze.startCell;
-        dest.color = Maze.destColor;
+        start.color = Maze.START_COLOR;
+        dest.color = Maze.DESTINATION_COLOR;
     }
 
     public abstract void pathFound();

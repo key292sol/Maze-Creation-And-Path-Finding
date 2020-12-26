@@ -11,43 +11,54 @@ public class GeneratorMain extends JFrame {
     boolean started = false, finished = false, visualize = true;
 
     GeneratorMain() {
+        // +25 and +50 because of Frame borders
         setSize(Maze.frameWidth + 25, Maze.frameHeight + 50);
         setVisible(true);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        generator = new RecursiveBacktrackingAlgorithm(100);
-        if (!visualize) generator.createWholeMaze();
+        generator = new RecursiveBacktrackingAlgorithm(20);
+        if (!visualize)
+            generator.createWholeMaze();
         repaint();
     }
 
     public void paint(Graphics g) {
-        if (generator != null && generator.maze != null) {
-            // For showing whole maze
-            if (!visualize) {
-                drawWholeGrid(g);
-            } 
-            // For watching the maze creation cell by cell
-            // Increase the time in Thread.sleep at the end of method to slow it down
-            else if (!started) {
-                started = true;
-                drawWholeGrid(g);
+        if (generator == null || generator.maze == null) {
+            repaint();
+            return;
+        }
+
+        /*
+         * If visualization is false then maze has been created and just need to be
+         * displayed Else: Draw the whole grid before starting the maze creation For
+         * every iteration draw the current cell and the last cell If the whole maze is
+         * created then display the whole maze
+         */
+
+        if (!visualize) {
+            drawWholeGrid(g);
+        } else if (!started) {
+            started = true;
+            drawWholeGrid(g);
+            repaint();
+        } else if (!finished) {
+            Maze.Cell cell = generator.nextIteration();
+            if (generator.current != null) {
+                generator.drawCell(g, cell);
+                generator.drawCell(g, generator.current);
                 repaint();
-            } else if (!finished) {
-                Maze.Cell cell = generator.nextIteration();
-                if (generator.current != null) {
-                    generator.drawCell(g, cell);
-                    generator.drawCell(g, generator.current);
-                    repaint();
-                } else {
-                    finished = true;
-                    drawWholeGrid(g);
-                }
+            } else {
+                finished = true;
+                drawWholeGrid(g);
             }
         }
+
+        // Thread.sleep to slow down the visualization of maze creation
         try {
-            // Thread.sleep(100);
-        } catch (Exception e) {}
+            // Thread.sleep(1000);
+        } catch (Exception e) {
+        }
     }
 
     public void drawWholeGrid(Graphics g) {
