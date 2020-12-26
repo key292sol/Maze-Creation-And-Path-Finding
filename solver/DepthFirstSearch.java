@@ -16,40 +16,45 @@ public class DepthFirstSearch extends MazeSolver {
         pathStack.push(current);
     }
 
+    /*
+     * Keep visiting nodes until we reach a dead end
+     * After reaching dead end backtrack till a node with not visited neighbors
+     * Repeat until destintion is found
+     */
     public Cell nextIteration() {
-        if (!pathStack.empty()) {
-            Cell last = current;
-            if (last != null && last != start) last.color = Maze.visitedColor;
+        Cell last  = current;
+        if (last != start && last != dest) 
+            last.color = Maze.VISITED_COLOR;
+
+        if (current == dest) {
+            finished = true;
+            pathFound();
+            return null;
+        } else if (current.neighbors.size() == 0) {
+            pathStack.pop();
             current = pathStack.peek();
-            if (current == dest) {
-                finished = true;
-                pathFound();
-                return null;
-            }
-            if (current != start) current.color = Maze.currentCellColor;
-            
-            if (current.neighbors.size() == 0) {
-                pathStack.pop().color = currentCellColor;
-                return last;
-            }
-
-            Cell selected = current.neighbors.remove(0);
-
-            selected.neighbors.remove(current);
-            if (selected != dest) selected.color = Maze.visitedColor;
-            pathStack.push(selected);
+            if (current != start && current != dest) current.color = Maze.CURR_CELL_COLOR;
             return last;
         }
-        return null;
+
+        Cell selected = current.neighbors.remove(0);
+        selected.neighbors.remove(current);
+        pathStack.push(selected);
+        
+        current = selected;
+        if (current != start && current != dest)
+            current.color = Maze.CURR_CELL_COLOR;
+
+        return last;
     }
 
     public void pathFound() {
-        pathStack.pop();
+        pathStack.pop(); // Popping the destintion node
         while (pathStack.size() > 1) {
             Cell cell = pathStack.pop();
-            cell.color = Maze.pathColor;
+            cell.color = Maze.PATH_COLOR;
         }
-        pathStack.pop();
+        pathStack.pop(); // Popping the start node from stack
     }
 }
 
