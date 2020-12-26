@@ -6,14 +6,14 @@ import java.awt.Graphics;
 import java.awt.Color;
 
 public abstract class Maze {
-    public static Color visitedColor     = Color.LIGHT_GRAY;
-    public static Color notVisitedColor  = Color.WHITE;
-    public static Color currentCellColor = Color.YELLOW;
-    public static Color pathColor        = Color.GREEN;
-    public static Color startCell        = Color.RED;
-    public static Color destColor        = Color.BLUE;
+    public static final Color VISITED_COLOR      = Color.LIGHT_GRAY;
+    public static final Color NOT_VISITED_COLOR  = Color.WHITE;
+    public static final Color CURR_CELL_COLOR    = Color.YELLOW;
+    public static final Color PATH_COLOR         = Color.GREEN;
+    public static final Color START_COLOR        = Color.RED;
+    public static final Color DESTINATION_COLOR  = Color.BLUE;
     
-    public static int frameWidth = 760, frameHeight = 760;
+    public static final int frameWidth = 760, frameHeight = 760;
 
     public Cell[][] maze;
     public Cell current;
@@ -32,44 +32,45 @@ public abstract class Maze {
             this.row = row;
             this.col = col;
         }
+    }
+    
+    public void setInitialNeighbors(Cell cell) {
+        Cell[] potentials = { getCellAt(cell.row - 1, cell.col), getCellAt(cell.row, cell.col + 1), getCellAt(cell.row + 1, cell.col),
+            getCellAt(cell.row, cell.col - 1), };
+        for (Cell n : potentials) {
+            if (n != null)
+                cell.neighbors.add(n);
+        }
+    }
 
-        public void setNeighbors() {
-            Cell[] potentials = { getCellAt(row - 1, col), getCellAt(row, col + 1), getCellAt(row + 1, col),
-                    getCellAt(row, col - 1), };
-            for (int i = 0; i < potentials.length; i++) {
-                if (!walls[i]) {
-                    this.neighbors.add(potentials[i]);
-                }
+    public void setNeighbors(Cell cell) {
+        cell.neighbors = new ArrayList<>();
+        Cell[] potentials = { getCellAt(cell.row - 1, cell.col), getCellAt(cell.row, cell.col + 1), getCellAt(cell.row + 1, cell.col),
+                getCellAt(cell.row, cell.col - 1), };
+        for (int i = 0; i < potentials.length; i++) {
+            if (!cell.walls[i]) {
+                cell.neighbors.add(potentials[i]);
             }
         }
-
-        public void setInitialNeighbors() {
-            Cell[] potentials = { getCellAt(row - 1, col), getCellAt(row, col + 1), getCellAt(row + 1, col),
-                    getCellAt(row, col - 1), };
-            for (Cell cell : potentials) {
-                if (cell != null)
-                    neighbors.add(cell);
+    }
+        
+    public Cell getRandomNeighbor(Cell cell) {
+        Random random = new Random();
+        boolean visitedN[] = new boolean[cell.neighbors.size()];
+        int i = 0;
+        while (i < cell.neighbors.size()) {
+            visitedN[i] = cell.neighbors.get(i).visited;
+            i++;
+        }
+        while (i > 0) {
+            i--;
+            if (visitedN[i]) {
+                cell.neighbors.remove(i);
             }
         }
-
-        public Cell getRandomNeighbor() {
-            Random random = new Random();
-            boolean visitedN[] = new boolean[neighbors.size()];
-            int i = 0;
-            while (i < neighbors.size()) {
-                visitedN[i] = neighbors.get(i).visited;
-                i++;
-            }
-            while (i > 0) {
-                i--;
-                if (visitedN[i]) {
-                    neighbors.remove(i);
-                }
-            }
-            if (neighbors.size() == 0)
-                return null;
-            return neighbors.remove(random.nextInt(neighbors.size()));
-        }
+        if (cell.neighbors.size() == 0)
+            return null;
+        return cell.neighbors.remove(random.nextInt(cell.neighbors.size()));
     }
 
     public Cell getCellAt(int r, int c) {
