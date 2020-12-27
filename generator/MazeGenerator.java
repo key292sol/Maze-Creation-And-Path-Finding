@@ -43,6 +43,7 @@ public abstract class MazeGenerator extends Maze {
             for (Cell cell : cells) {
                 cell.visited = false;
                 cell.color   = Maze.NOT_VISITED_COLOR;
+                cell.last    = null;
                 setNeighbors(cell);
             }
         }

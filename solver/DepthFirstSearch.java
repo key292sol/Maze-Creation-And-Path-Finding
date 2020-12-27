@@ -1,19 +1,14 @@
 package solver;
 
-import java.util.Stack;
-
 import maze.Maze;
 
 public class DepthFirstSearch extends MazeSolver {
-    Stack<Cell> pathStack = new Stack<>();
-
     DepthFirstSearch(int size) {
         this(size, size);
     }
 
     DepthFirstSearch(int row, int col) {
         super(row, col);
-        pathStack.push(current);
     }
 
     /*
@@ -31,15 +26,14 @@ public class DepthFirstSearch extends MazeSolver {
             pathFound();
             return null;
         } else if (current.neighbors.size() == 0) {
-            pathStack.pop();
-            current = pathStack.peek();
+            current = current.last;
             if (current != start && current != dest) current.color = Maze.CURR_CELL_COLOR;
             return last;
         }
 
         Cell selected = current.neighbors.remove(0);
         selected.neighbors.remove(current);
-        pathStack.push(selected);
+        selected.last = current;
 
         current = selected;
         if (current != start && current != dest)
@@ -49,11 +43,11 @@ public class DepthFirstSearch extends MazeSolver {
     }
 
     public void pathFound() {
-        pathStack.pop();                             // Popping the destintion node
-        while (pathStack.size() > 1) {
-            pathStack.pop().color = Maze.PATH_COLOR; // Popping each node in path and changing its color
+        current = current.last;                             // Popping the destintion node
+        while (current.last != null) {
+            current.color = Maze.PATH_COLOR; // Popping each node in path and changing its color
+            current = current.last;
         }
-        pathStack.pop();                             // Popping the start node from stack
     }
 }
 

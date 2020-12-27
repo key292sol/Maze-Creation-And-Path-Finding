@@ -1,27 +1,22 @@
 package generator;
 
-import java.util.Stack;
-
 import maze.Maze;
 
 // Recursuve Backtracking Algorithm is sometimes also known as Random Depth First Search
 public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
-    Stack<Cell> cellStack;
-
     RecursiveBacktrackingAlgorithm(int gridSize) {
         this(gridSize, gridSize);
     }
 
     public RecursiveBacktrackingAlgorithm(int row, int col) {
         super(row, col);
-        cellStack = new Stack<>();
-        cellStack.push(current);
         current.visited = true;
     }
 
     public void createWholeMaze() {
-        while (!cellStack.isEmpty())
+        do {
             nextIteration();
+        } while (current.last != null);
         
         setGridNotVisited();
     }
@@ -43,10 +38,8 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
         
         Cell selected = getRandomNeighbor(current);
         if (selected == null) {
-            cellStack.pop();
-
-            if (!cellStack.empty()) {
-                current = cellStack.peek();
+            if (current.last != null) {
+                current = current.last;
                 current.color = Maze.CURR_CELL_COLOR;
                 return last;
             } else {
@@ -58,7 +51,7 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
         selected.visited = true;
         removeWall(selected);
         selected.neighbors.remove(current);
-        cellStack.push(selected);
+        selected.last = current;
 
         current = selected;
         current.color = Maze.CURR_CELL_COLOR;

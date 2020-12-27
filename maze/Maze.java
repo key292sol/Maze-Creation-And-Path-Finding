@@ -27,6 +27,7 @@ public abstract class Maze {
         public boolean[] walls = { true, true, true, true }; // up right down left
         public int row, col;
         public ArrayList<Cell> neighbors = new ArrayList<>();
+        public Cell last;
 
         public Cell(int row, int col) {
             this.row = row;
