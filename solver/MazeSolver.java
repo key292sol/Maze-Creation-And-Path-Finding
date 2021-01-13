@@ -13,11 +13,18 @@ public abstract class MazeSolver extends Maze {
         this.blockSize = gen.blockSize;
         this.maze = gen.maze;
 
-        current = start = getRandomCell(row, col);
-        dest = getRandomCell(row, col);
+        current = start = getCellAt(0, 0);
+        dest = getCellAt(row-1, col-1);
         start.color = Maze.START_COLOR;
         dest.color = Maze.DESTINATION_COLOR;
     }
 
     public abstract void pathFound();
+
+    public void lastPathCell() {
+        if (current.last != start) {
+            current = current.last;
+            current.color = Maze.PATH_COLOR;
+        }
+    }
 }

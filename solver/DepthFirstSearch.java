@@ -23,7 +23,6 @@ public class DepthFirstSearch extends MazeSolver {
 
         if (current == dest) {
             finished = true;
-            pathFound();
             return null;
         } else if (current.neighbors.size() == 0) {
             current = current.last;

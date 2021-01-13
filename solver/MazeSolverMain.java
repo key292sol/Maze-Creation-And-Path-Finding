@@ -22,7 +22,8 @@ public class MazeSolverMain extends JFrame {
 
         int gridRows, gridCols = 20;
         gridRows = gridCols;
-        solver = new DepthFirstSearch(gridRows);
+        solver = new BFS(gridRows);
+        // solver = new DepthFirstSearch(gridRows);
         repaint();
     }
 
@@ -48,11 +49,13 @@ public class MazeSolverMain extends JFrame {
             }
             repaint();
         } else {
-            drawWholeGrid(g);
+            solver.lastPathCell();
+            solver.drawCell(g, solver.current);
+            if (solver.current.last != null) repaint();
         }
 
         try {
-            Thread.sleep(100);
+            // Thread.sleep(1);
         } catch (Exception e) {
             
         }
