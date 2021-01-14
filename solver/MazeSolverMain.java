@@ -3,6 +3,7 @@ package solver;
 import javax.swing.JFrame;
 
 import maze.*;
+import generator.*;
 
 import java.awt.Graphics;
 
@@ -19,10 +20,17 @@ public class MazeSolverMain extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int gridRows, gridCols = 20;
+        int gridRows, gridCols = 152;
         gridRows = gridCols;
-        solver = new BFS(gridRows);
-        // solver = new DepthFirstSearch(gridRows);
+
+        MazeGenerator gen;
+        gen = new RandomPrims(gridRows);
+        gen.createWholeMaze();
+
+        // solver = new DepthFirstSearch();
+        solver = new BFS();
+
+        solver.setGenerator(gen);
         repaint();
     }
 
@@ -54,7 +62,7 @@ public class MazeSolverMain extends JFrame {
         }
 
         try {
-            Thread.sleep(50);
+            // Thread.sleep(1);
         } catch (Exception e) {
             
         }

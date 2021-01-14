@@ -3,17 +3,14 @@ package solver;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import generator.MazeGenerator;
 import maze.*;
 
 public class BFS extends MazeSolver {
     Queue<Cell> cellQueue;
 
-    BFS(int size) {
-        this(size, size);
-    }
-
-    BFS(int row, int col) {
-        super(row, col);
+    public void setGenerator(MazeGenerator gen) {
+        super.setGenerator(gen);
         cellQueue = new LinkedList<>();
         cellQueue.add(current);
     }

@@ -3,14 +3,6 @@ package solver;
 import maze.*;
 
 public class DepthFirstSearch extends MazeSolver {
-    DepthFirstSearch(int size) {
-        this(size, size);
-    }
-
-    DepthFirstSearch(int row, int col) {
-        super(row, col);
-    }
-
     /*
      * Keep visiting nodes until we reach a dead end
      * After reaching dead end backtrack till a node with not visited neighbors
