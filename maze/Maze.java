@@ -20,20 +20,6 @@ public abstract class Maze {
     public int blockSize;
 
     public abstract Cell nextIteration();
-
-    public class Cell {
-        public boolean visited = false;
-        public Color color = Color.WHITE;
-        public boolean[] walls = { true, true, true, true }; // up right down left
-        public int row, col;
-        public ArrayList<Cell> neighbors = new ArrayList<>();
-        public Cell last;
-
-        public Cell(int row, int col) {
-            this.row = row;
-            this.col = col;
-        }
-    }
     
     public void setInitialNeighbors(Cell cell) {
         Cell[] potentials = { getCellAt(cell.row - 1, cell.col), getCellAt(cell.row, cell.col + 1), getCellAt(cell.row + 1, cell.col),

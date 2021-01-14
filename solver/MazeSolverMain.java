@@ -2,15 +2,14 @@ package solver;
 
 import javax.swing.JFrame;
 
-import maze.Maze;
-import maze.Maze.Cell;
+import maze.*;
 
 import java.awt.Graphics;
 
 public class MazeSolverMain extends JFrame {
     private static final long serialVersionUID = 1L;
     MazeSolver solver;
-    Maze.Cell start;
+    Cell start;
     boolean started = false, finished = false;
 
     MazeSolverMain() {
@@ -55,15 +54,15 @@ public class MazeSolverMain extends JFrame {
         }
 
         try {
-            // Thread.sleep(1);
+            Thread.sleep(50);
         } catch (Exception e) {
             
         }
     }
 
     public void drawWholeGrid(Graphics g) {
-        for (Maze.Cell[] cells : solver.maze) {
-            for (Maze.Cell cell : cells) {
+        for (Cell[] cells : solver.maze) {
+            for (Cell cell : cells) {
                 solver.drawCell(g, cell);
             }
         }

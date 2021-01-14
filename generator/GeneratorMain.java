@@ -1,6 +1,6 @@
 package generator;
 
-import maze.Maze;
+import maze.*;
 
 import javax.swing.JFrame;
 import java.awt.Graphics;
@@ -43,7 +43,7 @@ public class GeneratorMain extends JFrame {
             drawWholeGrid(g);
             repaint();
         } else if (!finished) {
-            Maze.Cell cell = generator.nextIteration();
+            Cell cell = generator.nextIteration();
             if (generator.current != null) {
                 generator.drawCell(g, cell);
                 generator.drawCell(g, generator.current);
@@ -62,8 +62,8 @@ public class GeneratorMain extends JFrame {
     }
 
     public void drawWholeGrid(Graphics g) {
-        for (Maze.Cell[] cells : generator.maze) {
-            for (Maze.Cell cell : cells) {
+        for (Cell[] cells : generator.maze) {
+            for (Cell cell : cells) {
                 generator.drawCell(g, cell);
             }
         }

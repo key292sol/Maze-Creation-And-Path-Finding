@@ -1,7 +1,7 @@
 package solver;
 
 import generator.*;
-import maze.Maze;
+import maze.*;
 
 public abstract class MazeSolver extends Maze {
     Cell start, dest;

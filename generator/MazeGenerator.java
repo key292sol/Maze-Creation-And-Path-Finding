@@ -1,6 +1,6 @@
 package generator;
 
-import maze.Maze;
+import maze.*;
 
 import java.util.Random;
 

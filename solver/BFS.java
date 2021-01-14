@@ -3,7 +3,7 @@ package solver;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import maze.Maze;
+import maze.*;
 
 public class BFS extends MazeSolver {
     Queue<Cell> cellQueue;

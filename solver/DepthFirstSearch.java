@@ -1,6 +1,6 @@
 package solver;
 
-import maze.Maze;
+import maze.*;
 
 public class DepthFirstSearch extends MazeSolver {
     DepthFirstSearch(int size) {
