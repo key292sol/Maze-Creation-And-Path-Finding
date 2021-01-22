@@ -4,7 +4,8 @@ import maze.*;
 
 // Recursuve Backtracking Algorithm is sometimes also known as Random Depth First Search
 public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
-    RecursiveBacktrackingAlgorithm(int gridSize) {
+    
+    public RecursiveBacktrackingAlgorithm(int gridSize) {
         this(gridSize, gridSize);
     }
 

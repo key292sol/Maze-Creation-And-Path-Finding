@@ -20,15 +20,18 @@ public class MazeSolverMain extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        int gridRows, gridCols = 152;
+        int gridRows, gridCols = 150;
         gridRows = gridCols;
 
         MazeGenerator gen;
+        
+        // gen = new RecursiveBacktrackingAlgorithm(gridRows);
         gen = new RandomPrims(gridRows);
         gen.createWholeMaze();
 
         // solver = new DepthFirstSearch();
-        solver = new BFS();
+        // solver = new BFS();
+        solver = new AStar();
 
         solver.setGenerator(gen);
         repaint();
@@ -41,8 +44,10 @@ public class MazeSolverMain extends JFrame {
         }
 
         if (!started) {
-            started = true;
-            drawWholeGrid(g);
+            if (solver.maze != null) {
+                started = true;
+                drawWholeGrid(g);
+            }
             repaint();
         } else if (!finished) {
             g.setColor(Maze.VISITED_COLOR);
@@ -62,7 +67,7 @@ public class MazeSolverMain extends JFrame {
         }
 
         try {
-            // Thread.sleep(1);
+            // Thread.sleep(50);
         } catch (Exception e) {
             
         }

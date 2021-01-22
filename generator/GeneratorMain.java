@@ -17,7 +17,8 @@ public class GeneratorMain extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        generator = new RecursiveBacktrackingAlgorithm(20);
+        // generator = new RecursiveBacktrackingAlgorithm(20);
+        generator = new RandomPrims(10);
         if (!visualize)
             generator.createWholeMaze();
         repaint();
@@ -44,7 +45,7 @@ public class GeneratorMain extends JFrame {
             repaint();
         } else if (!finished) {
             Cell cell = generator.nextIteration();
-            if (generator.current != null) {
+            if (generator.current != null && cell != null) {
                 generator.drawCell(g, cell);
                 generator.drawCell(g, generator.current);
                 repaint();
@@ -56,7 +57,7 @@ public class GeneratorMain extends JFrame {
 
         // Thread.sleep to slow down the visualization of maze creation
         try {
-            // Thread.sleep(1000);
+            Thread.sleep(1);
         } catch (Exception e) {
         }
     }
