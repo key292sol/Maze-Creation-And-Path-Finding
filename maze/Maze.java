@@ -73,7 +73,7 @@ public abstract class Maze {
 
     public void drawCell(Graphics g, Cell cell) {
         g.setColor(cell.color);
-        g.fillRect(cell.col * blockSize + 10, cell.row * blockSize + 35, blockSize, blockSize);
+        g.fillRect(getDrawXPos(cell.col) + 1, getDrawYPos(cell.row) + 1, blockSize, blockSize);
         g.setColor(Color.BLACK);
 
         int[][] walls = {                                                               // x1, y1, x2, y2 positions
