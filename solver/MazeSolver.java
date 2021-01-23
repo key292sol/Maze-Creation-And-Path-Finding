@@ -5,7 +5,7 @@ import maze.*;
 
 public abstract class MazeSolver extends Maze {
     Cell start, dest;
-    boolean finished = false;
+    public boolean finished = false;
 
     public void setGenerator(MazeGenerator gen) {
         this.blockSize = gen.blockSize;
@@ -18,6 +18,14 @@ public abstract class MazeSolver extends Maze {
     }
 
     public abstract void pathFound();
+
+    @Override
+    public void completeAllIterations() {
+        super.completeAllIterations();
+        while (current.last != start) {
+            lastPathCell();
+        }
+    }
 
     public void lastPathCell() {
         if (current.last != start) {

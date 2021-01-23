@@ -14,14 +14,6 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
         current.visited = true;
     }
 
-    public void createWholeMaze() {
-        do {
-            nextIteration();
-        } while (current.last != null);
-        
-        setGridNotVisited();
-    }
-
     /*
      * 1. Store current cell so to redraw it after the current iteration
      * 2. Get the last cell in the stack
@@ -33,6 +25,7 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
      * If the cellStack is empty then it means we have backtracked till the start point 
      * Set whole grid as not visited to enable path finding 
      */
+    @Override
     public Cell nextIteration() {
         Cell last  = current;
         last.color = Maze.VISITED_COLOR;

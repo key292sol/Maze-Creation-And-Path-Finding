@@ -20,6 +20,10 @@ public abstract class Maze {
     public int blockSize;
 
     public abstract Cell nextIteration();
+
+    public void completeAllIterations() {
+        while (nextIteration() != null) {}
+    }
     
     public void setInitialNeighbors(Cell cell) {
         Cell[] potentials = { getCellAt(cell.row - 1, cell.col), getCellAt(cell.row, cell.col + 1), getCellAt(cell.row + 1, cell.col),

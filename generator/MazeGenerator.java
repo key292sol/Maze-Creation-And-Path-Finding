@@ -35,7 +35,11 @@ public abstract class MazeGenerator extends Maze {
         current = getRandomCell(row, col);
     }
 
-    public abstract void createWholeMaze();
+    @Override
+    public void completeAllIterations() {
+        super.completeAllIterations();
+        setGridNotVisited();
+    }
 
     public void setGridNotVisited() {
         current = null;

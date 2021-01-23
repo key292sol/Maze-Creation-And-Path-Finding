@@ -17,14 +17,7 @@ public class RandomPrims extends MazeGenerator {
         cellsList.add(current);
     }
 
-    public void createWholeMaze() {
-        do {
-            nextIteration();
-        } while (cellsList.size() > 0);
-        
-        setGridNotVisited();
-    }
-
+    @Override
     public Cell nextIteration() {
         if (cellsList.size() == 0) {
             setGridNotVisited();

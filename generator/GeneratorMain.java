@@ -8,7 +8,7 @@ import java.awt.Graphics;
 public class GeneratorMain extends JFrame {
     private static final long serialVersionUID = 1L;
     MazeGenerator generator;
-    boolean started = false, finished = false, visualize = true;
+    boolean started = false, finished = false, visualize = !true;
 
     GeneratorMain() {
         // +25 and +50 because of Frame borders
@@ -20,7 +20,7 @@ public class GeneratorMain extends JFrame {
         // generator = new RecursiveBacktrackingAlgorithm(20);
         generator = new RandomPrims(10);
         if (!visualize)
-            generator.createWholeMaze();
+            generator.completeAllIterations();
         repaint();
     }
 

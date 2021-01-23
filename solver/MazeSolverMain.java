@@ -11,7 +11,7 @@ public class MazeSolverMain extends JFrame {
     private static final long serialVersionUID = 1L;
     MazeSolver solver;
     Cell start;
-    boolean started = false, finished = false;
+    boolean started = false, finished = false, visualize = !true;
 
     MazeSolverMain() {
         // +25 and +50 because of Frame borders
@@ -27,19 +27,25 @@ public class MazeSolverMain extends JFrame {
         
         // gen = new RecursiveBacktrackingAlgorithm(gridRows);
         gen = new RandomPrims(gridRows);
-        gen.createWholeMaze();
+        gen.completeAllIterations();
 
         // solver = new DepthFirstSearch();
         // solver = new BFS();
         solver = new AStar();
 
         solver.setGenerator(gen);
+        if (!visualize) solver.completeAllIterations();
         repaint();
     }
 
     public void paint(Graphics g) {
-        if (this.solver == null) {
+        if (this.solver == null || this.solver.maze == null) {
             repaint();
+            return;
+        }
+
+        if (!visualize) {
+            drawWholeGrid(g);
             return;
         }
 
