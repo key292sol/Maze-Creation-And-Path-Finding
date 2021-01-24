@@ -32,17 +32,8 @@ public class BFS extends MazeSolver {
         }
         current.neighbors.clear();
         current = cellQueue.remove();
-        if (current != start && current != dest)
-            current.color = Maze.CURR_CELL_COLOR;
+        colorCurrentCell();
 
         return last;
-    }
-
-    public void pathFound() {
-        current = current.last;                             // Popping the destintion node
-        while (current.last != null) {
-            current.color = Maze.PATH_COLOR; // Popping each node in path and changing its color
-            current = current.last;
-        }
     }
 }

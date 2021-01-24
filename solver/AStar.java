@@ -24,8 +24,7 @@ public class AStar extends MazeSolver {
         } else {
             calcNeighborCost();
             current = pqueue.remove();
-            if (current != start && current != dest)
-                current.color = Maze.CURR_CELL_COLOR;
+            colorCurrentCell();
         }
 
         return last;
@@ -52,9 +51,4 @@ public class AStar extends MazeSolver {
         int a = r1 - r2, b = c1 - c2;
         return (int) Math.sqrt((a*a) + (b*b));
     }
-
-    public void pathFound() {
-
-    }
-    
 }
