@@ -45,9 +45,8 @@ public class RandomPrims extends MazeGenerator {
         
         // Get a random cell from list and a random neighbor
         current = cellsList.get(random.nextInt(cellsList.size()));
-        current.color = Maze.CURR_CELL_COLOR;
         Cell selected = getRandomNeighbor(current);
-
+        
         // If cell has no unvisited neighbors left then return
         // Else remove the walls and dd the selected cell to the list
         if (selected == null) {
@@ -56,8 +55,10 @@ public class RandomPrims extends MazeGenerator {
             selected.visited = true;
             removeWall(selected);
             cellsList.add(selected);
+            current = selected;
         }
-        
+
+        current.color = Maze.CURR_CELL_COLOR;
     	return last;
     }
 }

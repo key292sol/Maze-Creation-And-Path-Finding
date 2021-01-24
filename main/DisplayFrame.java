@@ -34,7 +34,7 @@ public class DisplayFrame extends JFrame {
         rows = (Integer)ch.rowSpinner.getValue();
         cols = (Integer)ch.colSpinner.getValue();
         double d = (Double)ch.delaySpinner.getValue();
-        delay = (int) d * 1000;
+        delay = (int) (d * 1000);
         visualizeGen = ch.genCheck.isSelected();
         visualizeFind = ch.findCheck.isSelected();
 
