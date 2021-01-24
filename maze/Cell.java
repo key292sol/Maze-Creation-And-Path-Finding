@@ -6,7 +6,7 @@ import java.awt.Color;
 public class Cell implements Comparable<Cell> {
     public boolean visited = false;
     public Color color = Maze.NOT_VISITED_COLOR;
-    public boolean[] walls = { true, true, true, true }; // up right down left
+    public boolean[] walls = { true, true, true, true }; // Directions: up right down left
     public int row, col;
     public ArrayList<Cell> neighbors = new ArrayList<>();
     public Cell last;
@@ -17,6 +17,9 @@ public class Cell implements Comparable<Cell> {
         this.col = col;
     }
 
+    // compareTo() method of Comparable interface
+    // Implemented for Priority queue in A* path finding
+    @Override
     public int compareTo(Cell other) {
         if (this.fcost > other.fcost) {
             return 1;
