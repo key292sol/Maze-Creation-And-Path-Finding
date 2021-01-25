@@ -63,7 +63,7 @@ public class DisplayFrame extends JFrame {
                 solver = new BFS();
                 break;
             case 2:
-                solver = new AStar();
+                solver = new AStar(false);
                 break;
         }
 
