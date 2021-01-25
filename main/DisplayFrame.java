@@ -65,6 +65,9 @@ public class DisplayFrame extends JFrame {
             case 2:
                 solver = new AStar(false);
                 break;
+            case 3:
+                solver = new AStar(true);
+                break;
         }
 
         mazeObj = generator;

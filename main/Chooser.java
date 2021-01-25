@@ -31,7 +31,7 @@ public class Chooser extends JFrame {
 
         rowSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
         colSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
-        delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.5));
+        delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.1));
 
         initBut = new JButton("Set Values");
         startGenBut = new JButton("Generate Maze");
@@ -71,7 +71,7 @@ public class Chooser extends JFrame {
 
     public void initFindChose() {
         findChose = new JComboBox<>();
-        String vals[] = {"DFS", "BFS", "A*"};
+        String vals[] = {"DFS", "BFS", "A* (Manhattan distance)", "A* (Euclidian distance)"};
         for (String str : vals) {
             findChose.addItem(str);
         }
