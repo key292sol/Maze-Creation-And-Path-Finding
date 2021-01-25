@@ -19,11 +19,17 @@ import maze.*;
  * 5. Repeat steps 2 to 5 until destination is reached
  */
 public class AStar extends MazeSolver {
-    PriorityQueue<Cell> pqueue = new PriorityQueue<>();
+    PriorityQueue<AStarCost> pqueue = new PriorityQueue<>();
+    private boolean useEuclidean;
+
+    public AStar(boolean euclidean) {
+        useEuclidean = euclidean;
+    }
 
     public void setGenerator(MazeGenerator gen) {
         super.setGenerator(gen);
-        pqueue.add(current);
+        AStarCost curCost = new AStarCost(current);
+        pqueue.add(curCost);
     }
 
     @Override
@@ -32,7 +38,8 @@ public class AStar extends MazeSolver {
         if (last != start && last != dest) 
             last.color = Maze.VISITED_COLOR;
         
-        current = pqueue.remove();
+        AStarCost curCost = pqueue.remove();
+        current = getCellAt(curCost.row, curCost.col);
         
         if (current == dest) {
             finished = true;
@@ -46,24 +53,73 @@ public class AStar extends MazeSolver {
     }
 
     private void calcNeighborCost() {
+        AStarCost cost;
         for (Cell cell : current.neighbors) {
-            // Calculate cost using x and y differences
-            cell.gcost = Math.abs(cell.row - start.row) + Math.abs(cell.col - start.col);
-            cell.hcost = Math.abs(cell.row - dest.row ) + Math.abs(cell.col - dest.col );
+            // Cost object for Priority queue
+            cost = new AStarCost(cell);
 
-            // Calculate cost using slopes of the points
-            // cell.gcost = getSlope(cell.row, cell.col, start.row, start.col);
-            // cell.hcost = getSlope(cell.row, cell.col, dest.row,  dest.col );
+            if (!useEuclidean) {
+                cost.calcManhattanCost();
+            } else {
+                cost.calcEuclidianCost();
+            }
 
-            cell.fcost = cell.gcost + cell.hcost;
+            cell.cost = cost.fcost;
             cell.last = current;
             cell.neighbors.remove(current);     // So that we don't calculate the cost again in a future iteration
-            pqueue.add(cell);
+            pqueue.add(cost);
         }
     }
 
-    private int getSlope(int r1, int c1, int r2, int c2) {
-        int a = r1 - r2, b = c1 - c2;
-        return (int) Math.sqrt((a*a) + (b*b));
+    // For stooring the costs of cells
+    class AStarCost implements Comparable<AStarCost> {
+        int row, col;
+        int gcost, hcost, fcost;
+    
+        AStarCost(Cell me) {
+            this.row = me.row;
+            this.col = me.col;
+        }
+
+        // The x distance + y distance
+        private void calcManhattanCost() {
+            this.gcost = Math.abs(this.row - start.row) + Math.abs(this.col - start.col);
+            this.hcost = Math.abs(this.row - dest.row ) + Math.abs(this.col - dest.col );
+            this.fcost = gcost + hcost;
+        }
+
+        // Adding the length of straight lines
+        private void calcEuclidianCost() {
+            this.gcost = getStraightDistance(this.row, this.col, start.row, start.col);
+            this.hcost = getStraightDistance(this.row, this.col, dest.row,  dest.col );
+            this.fcost = gcost + hcost;
+        }
+
+        private int getStraightDistance(int r1, int c1, int r2, int c2) {
+            int a = r1 - r2, b = c1 - c2;
+            return (int) Math.sqrt((a*a) + (b*b));
+        }
+    
+        // compareTo() method of Comparable interface
+        @Override
+        public int compareTo(AStarCost other) {
+            if (this.fcost > other.fcost) {
+                return 1;
+            } else if (this.fcost < other.fcost) {
+                return -1;
+            } else {
+                if (this.hcost > other.hcost) {
+                    return 1;
+                } else if (this.hcost < other.hcost) {
+                    return -1;
+                } else {
+                    if (this.gcost > other.gcost) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+            }
+        }
     }
 }
