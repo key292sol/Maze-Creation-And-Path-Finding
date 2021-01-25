@@ -71,7 +71,7 @@ public class Chooser extends JFrame {
 
     public void initFindChose() {
         findChose = new JComboBox<>();
-        String vals[] = {"DFS", "BFS", "A* (Manhattan distance)", "A* (Euclidian distance)"};
+        String vals[] = {"DFS", "BFS", "Optimised DFS", "A* (Manhattan distance)", "A* (Euclidian distance)"};
         for (String str : vals) {
             findChose.addItem(str);
         }

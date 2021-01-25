@@ -12,6 +12,7 @@ The main method can be found in main/Main.java class
 ## Path Finding Algorithms:
 - Depth First Search (DFS)
 - Breadth First Search (BFS)
+- Optimised DFS
 - A* (A-star) path finding
 
 ## Useful Links
@@ -23,5 +24,5 @@ The main method can be found in main/Main.java class
 ### Random Prim's:
 I've implemented a modified version of it which uses cells instead of walls.
 
-### A* path finding:
-I have implemented 2 ways to calculate cost of cells. I've commented one of those calculating ways. If you want to see it's output then you need to uncomment it.
+### Depth First Search
+Instead of using a stack, I have stored the backtracking info in the cells itself.

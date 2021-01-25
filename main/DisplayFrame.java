@@ -62,9 +62,12 @@ public class DisplayFrame extends JFrame {
                 solver = new BFS();
                 break;
             case 2:
-                solver = new AStar(false);
+                solver = new OptimizedDfs();
                 break;
             case 3:
+                solver = new AStar(false);
+                break;
+            case 4:
                 solver = new AStar(true);
                 break;
             default:
@@ -104,12 +107,12 @@ public class DisplayFrame extends JFrame {
 
         if (!visualize) {
             mazeObj.completeAllIterations();
-            drawWholeGrid(g);
             if (!genCompleted) {
                 endGen();
             } else {
                 endSolve();
             }
+            drawWholeGrid(g);
             return;
         }
 
