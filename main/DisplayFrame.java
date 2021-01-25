@@ -49,6 +49,9 @@ public class DisplayFrame extends JFrame {
             case 1: 
                 generator = new RandomPrims(rows, cols);
                 break;
+            case 2:
+                generator = new HuntAndKill(rows, cols);
+                break;
             default:
                 System.out.println("How a default in generator ?");
                 return;
@@ -122,6 +125,8 @@ public class DisplayFrame extends JFrame {
             if (solver.current.last == solver.start) endSolve();
             repaint();
         } else {
+            if (mazeObj.current != solver.dest && mazeObj.current != solver.start) mazeObj.current.color = Maze.VISITED_COLOR;
+            mazeObj.drawCell(g, mazeObj.current);
             Cell cell = mazeObj.nextIteration();
             if (mazeObj.current != null && cell != null) {
                 mazeObj.drawCell(g, cell);

@@ -63,7 +63,7 @@ public class Chooser extends JFrame {
 
     public void initGenChose() {
         genChose = new JComboBox<>();
-        String vals[] = {"Backtracker", "Random Prim's"};
+        String vals[] = {"Backtracker", "Random Prim's", "Hunt and Kill"};
         for (String str : vals) {
             genChose.addItem(str);
         }
