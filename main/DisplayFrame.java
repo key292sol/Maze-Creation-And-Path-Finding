@@ -11,12 +11,11 @@ import maze.*;
 public class DisplayFrame extends JFrame {
     private static final long serialVersionUID = 1L;
 
-    Chooser ch;
+    private Chooser ch;
 
     private int rows, cols, delay;
-    private boolean visualizeGen, visualizeFind;
-    private boolean genStarted, genEnded;
-    private boolean findStarted, findEnded;
+    private boolean gridDrawn, genCompleted, findCompleted;
+    private boolean visualizeGen, visualizeFind, visualize;
 
     private MazeGenerator generator;
     private MazeSolver solver;
@@ -38,10 +37,10 @@ public class DisplayFrame extends JFrame {
         visualizeGen = ch.genCheck.isSelected();
         visualizeFind = ch.findCheck.isSelected();
 
-        genStarted = false;
-        genEnded = false;
-        findStarted = false;
-        findEnded = false;
+        gridDrawn = false;
+        genCompleted = false;
+        findCompleted = false;
+        visualize = visualizeGen;
 
         switch (ch.genChose.getSelectedIndex()) {
             case 0: 
@@ -51,7 +50,7 @@ public class DisplayFrame extends JFrame {
                 generator = new RandomPrims(rows, cols);
                 break;
             default:
-                System.out.println("How a default generator ?");
+                System.out.println("How a default in generator ?");
                 return;
         }
 
@@ -68,76 +67,70 @@ public class DisplayFrame extends JFrame {
             case 3:
                 solver = new AStar(true);
                 break;
+            default:
+                System.out.println("How a default in solver ?");
+                return;
         }
 
         mazeObj = generator;
         repaint();
     }
 
-    public void startGeneration() {
-        genStarted = true;
-        repaint();
-    }
-
-    public void startSolving() {
-        findStarted = true;
+    public void doDraw() {
         repaint();
     }
 
     private void endGen() {
+        visualize = visualizeFind;
+        genCompleted = true;
         ch.genComplete();
         solver.setGenerator(generator);
         mazeObj = solver;
     }
 
+    private void endSolve() {
+        findCompleted = true;
+    }
+
     public void paint(Graphics g) {
-        if (mazeObj == null) return;
-        if (!genStarted) {
+        if (mazeObj == null || findCompleted) return;
+
+        if (!gridDrawn) {
+            gridDrawn = true;
             super.paint(g);
             drawWholeGrid(g);
             return;
         }
 
-        if (!genEnded) {
-            if (!visualizeGen) {
-                generator.completeAllIterations();
+        if (!visualize) {
+            mazeObj.completeAllIterations();
+            drawWholeGrid(g);
+            if (!genCompleted) {
                 endGen();
-                genEnded = true;
-                drawWholeGrid(g);
-                return;
-            }
-            Cell cell = generator.nextIteration();
-            if (generator.current != null && cell != null) {
-                generator.drawCell(g, cell);
-                generator.drawCell(g, generator.current);
             } else {
-                endGen();
-                genEnded = true;
-                drawWholeGrid(g);
+                endSolve();
             }
-        } else if (findStarted && !findEnded) {
-            if (visualizeFind) {
-                if (!solver.finished) {
-                    g.setColor(Maze.VISITED_COLOR);
-                    solver.drawCell(g, solver.current);
-                    Cell last = solver.nextIteration();
-                    if (last != null) {
-                        solver.drawCell(g, last);
-                        solver.drawCell(g, solver.current);
-                    }
-                } else {
-                    solver.lastPathCell();
-                    solver.drawCell(g, solver.current);
-                }
-            } else {
-                solver.completeAllIterations();
-                ch.startFindBut.setEnabled(false);
-                drawWholeGrid(g);
-                findEnded = true;
-            }
+            return;
         }
 
-        if (!findEnded) repaint();
+        if (genCompleted && solver.finished) {
+            solver.lastPathCell();
+            solver.drawCell(g, solver.current);
+            if (solver.current.last == solver.start) endSolve();
+            repaint();
+        } else {
+            Cell cell = mazeObj.nextIteration();
+            if (mazeObj.current != null && cell != null) {
+                mazeObj.drawCell(g, cell);
+                mazeObj.drawCell(g, mazeObj.current);
+                repaint();
+            } else if (!genCompleted) {
+                endGen();
+                drawWholeGrid(g);
+            } else {
+                repaint();
+            }
+        }
 
         try {
             Thread.sleep(delay);

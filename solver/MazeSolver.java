@@ -4,7 +4,7 @@ import generator.*;
 import maze.*;
 
 public abstract class MazeSolver extends Maze {
-    Cell start, dest;
+    public Cell start, dest;
     public boolean finished = false;
 
     // @param   gen The generator which created the maze to solve

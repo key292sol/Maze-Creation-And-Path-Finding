@@ -90,18 +90,18 @@ public class Chooser extends JFrame {
         public void actionPerformed(ActionEvent ae) {
             Object src = ae.getSource();
             if (src == initBut) {
-                startGenBut.setEnabled(true);
-                if (df == null) df = getNewDisplayFrame();
                 df.init();
+                startGenBut.setEnabled(true);
+                startFindBut.setEnabled(false);
             } else if (src == startGenBut) {
                 // Start Maze Generation
                 startGenBut.setEnabled(false);
-                df.startGeneration();
+                startFindBut.setEnabled(false);
             } else {
                 // Start Maze Solving
                 startFindBut.setEnabled(false);
-                df.startSolving();
             }
+            df.doDraw();
         }
     }
 }
