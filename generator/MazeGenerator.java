@@ -121,18 +121,26 @@ public abstract class MazeGenerator extends Maze {
     // Checking order acc to this.current cell: Top Right Bottom Left
     // @param   to  The neighbor of current cell
     public void removeWall(Cell to) {
-        if (current.row > to.row) {
-            current.walls[0] = false;
-            to.walls[2]      = false;
-        } else if (current.col < to.col) {
-            current.walls[1] = false;
-            to.walls[3]      = false;
-        } else if (current.row < to.row) {
-            current.walls[2] = false;
-            to.walls[0]      = false;
-        } else if (current.col > to.col) {
-            current.walls[3] = false;
-            to.walls[1]      = false;
+        removeWall(current, to);
+    }
+
+    // Remove wall between the 2 cells
+    // Checking order acc to the from cell: Top Right Bottom Left
+    // @param   from    The first cell
+    // @param   to      The neighbor of the first cell
+    public void removeWall(Cell from, Cell to) {
+        if (from.row > to.row) {
+            from.walls[0] = false;
+            to.walls[2]   = false;
+        } else if (from.col < to.col) {
+            from.walls[1] = false;
+            to.walls[3]   = false;
+        } else if (from.row < to.row) {
+            from.walls[2] = false;
+            to.walls[0]   = false;
+        } else if (from.col > to.col) {
+            from.walls[3] = false;
+            to.walls[1]   = false;
         }
     }
 }
