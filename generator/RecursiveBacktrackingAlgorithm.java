@@ -31,9 +31,8 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
     }
 
     @Override
-    public Cell nextIteration() {
-        Cell last  = current;
-        last.color = Maze.VISITED_COLOR;
+    public void nextIteration() {
+        super.nextIteration();
         
         Cell selected = getRandomNeighbor(current);
         // (selected == null) will be true when the cell has no unvisited neighbors
@@ -42,12 +41,11 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
             // Else the maze generation is completed
             if (current.last != null) {
                 current = current.last;
-                current.color = Maze.CURR_CELL_COLOR;
-                return last;
+                colorCurrentCell(Maze.CURR_CELL_COLOR);
             } else {
                 setGridNotVisited();
-                return null;
             }
+            return;
         }
 
         // Cell has unvisited neighbors
@@ -58,7 +56,6 @@ public class RecursiveBacktrackingAlgorithm extends MazeGenerator {
         selected.last = current;
 
         current = selected;
-        current.color = Maze.CURR_CELL_COLOR;
-        return last;
+        colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 }

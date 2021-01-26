@@ -4,6 +4,7 @@ import maze.*;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.awt.Color;
 
 public abstract class MazeGenerator extends Maze {
     Random random = new Random();
@@ -92,6 +93,12 @@ public abstract class MazeGenerator extends Maze {
     }
 
     @Override
+    public void colorCurrentCell(Color color) {
+        current.color = color;
+        changedCells.add(current);
+    }
+
+    @Override
     public void completeAllIterations() {
         super.completeAllIterations();
         setGridNotVisited();
@@ -99,7 +106,7 @@ public abstract class MazeGenerator extends Maze {
 
     // Setting maze to not visited for solving the maze afterwards
     public void setGridNotVisited() {
-        current = null;
+        finished = true;
         for (Cell[] cells : maze) {
             for (Cell cell : cells) {
                 cell.visited = false;

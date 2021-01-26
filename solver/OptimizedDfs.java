@@ -8,20 +8,18 @@ import maze.*;
  */
 public class OptimizedDfs extends MazeSolver {
     @Override
-    public Cell nextIteration() {
-        Cell last  = current;
-        if (last != start && last != dest) 
-            last.color = Maze.VISITED_COLOR;
+    public void nextIteration() {
+        super.nextIteration();
         
         // If destination is reached then solving is finished
         // Else if the cell has no neighbors then we reached a dead end
         if (current == dest) {
             finished = true;
-            return null;
+            return;
         } else if (current.neighbors.size() == 0) {
             current = current.last;
-            colorCurrentCell();
-            return last;
+            colorCurrentCell(Maze.CURR_CELL_COLOR);
+            return;
         }
 
         calcNeighborsCost(current);
@@ -30,9 +28,7 @@ public class OptimizedDfs extends MazeSolver {
         selected.last = current;
 
         current = selected;
-        colorCurrentCell();
-
-        return last;
+        colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 
     private void calcNeighborsCost(Cell cell) {

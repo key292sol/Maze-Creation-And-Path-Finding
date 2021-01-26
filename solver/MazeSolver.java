@@ -2,10 +2,10 @@ package solver;
 
 import generator.*;
 import maze.*;
+import java.awt.Color;
 
 public abstract class MazeSolver extends Maze {
     public Cell start, dest;
-    public boolean finished = false;
 
     // @param   gen The generator which created the maze to solve
     public void setGenerator(MazeGenerator gen) {
@@ -36,8 +36,10 @@ public abstract class MazeSolver extends Maze {
         }
     }
 
-    protected void colorCurrentCell() {
-        if (current != start && current != dest)
-            current.color = Maze.CURR_CELL_COLOR;
+    public void colorCurrentCell(Color color) {
+        if (current != start && current != dest) {
+            current.color = color;
+            changedCells.add(current);
+        }
     }
 }

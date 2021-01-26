@@ -1,5 +1,6 @@
 package maze;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Graphics;
 import java.awt.Color;
@@ -15,16 +16,24 @@ public abstract class Maze {
     public static final int frameWidth = 760, frameHeight = 760;
 
     public Cell[][] maze;
-    public Cell current;
+    public Cell current, last;
     public int blockSize;
+    public boolean finished = false;
+    public ArrayList<Cell> changedCells = new ArrayList<>();
+
+    public abstract void colorCurrentCell(Color color);
 
     // For performing a new iteration of solver or generator
-    // Must return null on completion
-    public abstract Cell nextIteration();
+    public void nextIteration() {
+        changedCells.clear();
+        colorCurrentCell(Maze.VISITED_COLOR);
+    }
 
     // If you don't want to visualize
     public void completeAllIterations() {
-        while (nextIteration() != null) {}
+        while (!finished) {
+            nextIteration();
+        }
     }
 
     public Cell getCellAt(int r, int c) {

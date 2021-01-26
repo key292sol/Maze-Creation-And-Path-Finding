@@ -8,7 +8,7 @@ import maze.*;
  * it hunts for a cell which has unvisited neighbors left
  */
 public class HuntAndKill extends MazeGenerator {
-    int curRow, curCol;
+    int curRow, curCol;     // For storing the last cell in the hunt
 
     public HuntAndKill(int size) {
         this(size, size);
@@ -19,11 +19,12 @@ public class HuntAndKill extends MazeGenerator {
         curRow = 0;
         curCol = 0;
         current = getCellAt(0, 0);
+        current.visited = true;
     }
 
-    public Cell nextIteration() {
-    	Cell last = current;
-        last.color = Maze.VISITED_COLOR;
+    @Override
+    public void nextIteration() {
+        super.nextIteration();
 
         Cell selected = getRandomNeighbor(current);
 
@@ -31,7 +32,7 @@ public class HuntAndKill extends MazeGenerator {
             nextPosition();
             if (hasEnded()) {
                 setGridNotVisited();
-                return null;
+                return;
             }
             current = getCellAt(curRow, curCol);
         } else {
@@ -41,8 +42,7 @@ public class HuntAndKill extends MazeGenerator {
             current = selected;
         }
 
-        current.color = Maze.CURR_CELL_COLOR;
-        return last;
+        colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 
     private void nextPosition() {

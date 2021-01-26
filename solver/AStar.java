@@ -33,23 +33,19 @@ public class AStar extends MazeSolver {
     }
 
     @Override
-    public Cell nextIteration() {
-        Cell last = current;
-        if (last != start && last != dest) 
-            last.color = Maze.VISITED_COLOR;
+    public void nextIteration() {
+        super.nextIteration();
         
         AStarCost curCost = pqueue.remove();
         current = getCellAt(curCost.row, curCost.col);
         
         if (current == dest) {
             finished = true;
-            return null;
+            return;
         } else {
             calcNeighborCost();
-            colorCurrentCell();
+            colorCurrentCell(Maze.CURR_CELL_COLOR);
         }
-
-        return last;
     }
 
     private void calcNeighborCost() {

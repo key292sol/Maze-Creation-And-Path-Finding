@@ -127,10 +127,11 @@ public class DisplayFrame extends JFrame {
         } else {
             if (mazeObj.current != solver.dest && mazeObj.current != solver.start) mazeObj.current.color = Maze.VISITED_COLOR;
             mazeObj.drawCell(g, mazeObj.current);
-            Cell cell = mazeObj.nextIteration();
-            if (mazeObj.current != null && cell != null) {
-                mazeObj.drawCell(g, cell);
-                mazeObj.drawCell(g, mazeObj.current);
+            mazeObj.nextIteration();
+            if (!mazeObj.finished) {
+                for (Cell c : mazeObj.changedCells) {
+                    mazeObj.drawCell(g, c);
+                }
                 repaint();
             } else if (!genCompleted) {
                 endGen();

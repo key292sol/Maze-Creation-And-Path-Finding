@@ -33,15 +33,14 @@ public class RandomPrims extends MazeGenerator {
     }
 
     @Override
-    public Cell nextIteration() {
+    public void nextIteration() {
         // If no cells left to evaluate
         if (cellsList.size() == 0) {
             setGridNotVisited();
-            return null;
+            return;
         }
-
-    	Cell last = current;
-        last.color = Maze.VISITED_COLOR;
+        
+        super.nextIteration();
         
         // Get a random cell from list and a random neighbor
         current = cellsList.get(random.nextInt(cellsList.size()));
@@ -58,7 +57,6 @@ public class RandomPrims extends MazeGenerator {
             current = selected;
         }
 
-        current.color = Maze.CURR_CELL_COLOR;
-    	return last;
+        colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 }

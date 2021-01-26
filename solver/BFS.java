@@ -23,15 +23,13 @@ public class BFS extends MazeSolver {
         cellQueue.add(current);
     }
 
-    public Cell nextIteration() {
-        Cell last = current;
-        if (last != start && last != dest)
-            last.color = VISITED_COLOR;
-
+    public void nextIteration() {
+        super.nextIteration();
+        
         current = cellQueue.remove();
         if (current == dest) {
             finished = true;
-            return null;
+            return;
         }
 
         for (Cell cell : current.neighbors) {
@@ -40,8 +38,6 @@ public class BFS extends MazeSolver {
             cell.last = current;
         }
 
-        colorCurrentCell();
-
-        return last;
+        colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 }
