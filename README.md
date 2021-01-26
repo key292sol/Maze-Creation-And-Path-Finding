@@ -1,13 +1,16 @@
 # Maze Creation and Path Finding
 
 This is a repository to store the implementations of various maze generation and maze solving algorithms.
-It can run using IDE or command line terminal.
+I haven't tried running it outside VS Code.
 
 The main method can be found in main/Main.java class
 
 ## Maze Generation Algorithms:
-- Randomized Depth First Search
+- Randomized Depth First Search (Backtracker)
 - Randomized Prim's
+- Hunt and Kill
+- Binary Tree Maze generation
+- Sidewinder
 
 ## Path Finding Algorithms:
 - Depth First Search (DFS)
@@ -23,6 +26,9 @@ The main method can be found in main/Main.java class
 
 ### Random Prim's:
 I've implemented a modified version of it which uses cells instead of walls.
+
+### Binary Tree
+It is implemented so that it carves a passage to the left or above the current cell.
 
 ### Depth First Search
 Instead of using a stack, I have stored the backtracking info in the cells itself.
