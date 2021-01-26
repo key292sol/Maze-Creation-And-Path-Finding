@@ -52,6 +52,9 @@ public class DisplayFrame extends JFrame {
             case 2:
                 generator = new HuntAndKill(rows, cols);
                 break;
+            case 3:
+                generator = new BinaryTreeGen(rows, cols);
+                break;
             default:
                 System.out.println("How a default in generator ?");
                 return;
@@ -104,6 +107,10 @@ public class DisplayFrame extends JFrame {
         if (!gridDrawn) {
             gridDrawn = true;
             super.paint(g);
+            if (!visualizeGen) {
+                generator.completeAllIterations();
+                endGen();
+            }
             drawWholeGrid(g);
             return;
         }

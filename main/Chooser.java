@@ -31,7 +31,7 @@ public class Chooser extends JFrame {
 
         rowSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
         colSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
-        delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.1));
+        delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.01));
 
         initBut = new JButton("Set Values");
         startGenBut = new JButton("Generate Maze");
@@ -63,7 +63,7 @@ public class Chooser extends JFrame {
 
     public void initGenChose() {
         genChose = new JComboBox<>();
-        String vals[] = {"Backtracker", "Random Prim's", "Hunt and Kill"};
+        String vals[] = {"Backtracker", "Random Prim's", "Hunt and Kill", "Binary Tree"};
         for (String str : vals) {
             genChose.addItem(str);
         }
