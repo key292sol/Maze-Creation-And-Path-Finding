@@ -55,6 +55,9 @@ public class DisplayFrame extends JFrame {
             case 3:
                 generator = new BinaryTreeGen(rows, cols);
                 break;
+            case 4:
+                generator = new Sidewinder(rows, cols);
+                break;
             default:
                 System.out.println("How a default in generator ?");
                 return;
