@@ -63,16 +63,14 @@ public class Chooser extends JFrame {
 
     public void initGenChose() {
         genChose = new JComboBox<>();
-        String vals[] = {"Backtracker", "Random Prim's", "Hunt and Kill", "Binary Tree", "Sidewinder"};
-        for (String str : vals) {
+        for (String str : Options.getGenListOptions()) {
             genChose.addItem(str);
         }
     }
 
     public void initFindChose() {
         findChose = new JComboBox<>();
-        String vals[] = {"DFS", "BFS", "Optimised DFS", "A* (Manhattan distance)", "A* (Euclidian distance)"};
-        for (String str : vals) {
+        for (String str : Options.getSolverListOptions()) {
             findChose.addItem(str);
         }
     }

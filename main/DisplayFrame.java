@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics;
+import java.lang.reflect.*;
 
 import javax.swing.JFrame;
 
@@ -42,46 +43,20 @@ public class DisplayFrame extends JFrame {
         findCompleted = false;
         visualize = visualizeGen;
 
-        switch (ch.genChose.getSelectedIndex()) {
-            case 0: 
-                generator = new RecursiveBacktrackingAlgorithm(rows, cols);
-                break;
-            case 1: 
-                generator = new RandomPrims(rows, cols);
-                break;
-            case 2:
-                generator = new HuntAndKill(rows, cols);
-                break;
-            case 3:
-                generator = new BinaryTreeGen(rows, cols);
-                break;
-            case 4:
-                generator = new Sidewinder(rows, cols);
-                break;
-            default:
-                System.out.println("How a default in generator ?");
-                return;
-        }
+        try {
+            Class<?> class1 = Class.forName(Options.getGenClassFromIndex(ch.genChose.getSelectedIndex()));
+            Constructor<?> con = class1.getConstructor(int.class, int.class);
+            generator = (MazeGenerator) con.newInstance(rows, cols);
 
-        switch (ch.findChose.getSelectedIndex()) {
-            case 0:
-                solver = new DepthFirstSearch();
-                break;
-            case 1:
-                solver = new BFS();
-                break;
-            case 2:
-                solver = new OptimizedDfs();
-                break;
-            case 3:
-                solver = new AStar(false);
-                break;
-            case 4:
-                solver = new AStar(true);
-                break;
-            default:
-                System.out.println("How a default in solver ?");
-                return;
+            class1 = Class.forName(Options.getSolveClassFromIndex(ch.findChose.getSelectedIndex()));
+            con = class1.getConstructors()[0];
+            if (con.getParameterCount() == 0) {
+                solver = (MazeSolver) con.newInstance();
+            } else {
+                solver = (MazeSolver) con.newInstance(Options.isConstructorValTrue(ch.findChose.getSelectedIndex()));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
         mazeObj = generator;
