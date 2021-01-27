@@ -2,15 +2,17 @@ package main;
 
 import java.awt.Graphics;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.lang.reflect.*;
 
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import generator.*;
 import solver.*;
 import maze.*;
 
-public class DisplayFrame extends JFrame {
+// TODO: Fix bug: JComponents being drawn over DisplayFrame Panel
+public class DisplayFrame extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private Chooser ch;
@@ -26,15 +28,12 @@ public class DisplayFrame extends JFrame {
 
     public DisplayFrame(Chooser ch) {
         this.ch = ch;
-        setSize(Maze.frameWidth + 25, Maze.frameHeight + 50);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     public void init() {
         rows = (Integer)ch.rowSpinner.getValue();
         cols = (Integer)ch.colSpinner.getValue();
+        blockSize = (Integer) ch.blockSizeSpinner.getValue();
         double d = (Double)ch.delaySpinner.getValue();
         delay = (int) (d * 1000);
         visualizeGen = ch.genCheck.isSelected();
@@ -44,10 +43,6 @@ public class DisplayFrame extends JFrame {
         genCompleted = false;
         findCompleted = false;
         visualize = visualizeGen;
-
-        // The blockSize shouldn't be less then 5
-        blockSize = Math.min(Maze.frameHeight, Maze.frameWidth) / Math.max(rows, cols);
-        blockSize = (blockSize < 5) ? 5 : blockSize;
 
         try {
             Class<?> class1 = Class.forName(Options.getGenClassFromIndex(ch.genChose.getSelectedIndex()));
@@ -66,6 +61,7 @@ public class DisplayFrame extends JFrame {
         }
 
         mazeObj = generator;
+        setPreferredSize(new Dimension(rows * blockSize, cols * blockSize));
         repaint();
     }
 
@@ -85,12 +81,13 @@ public class DisplayFrame extends JFrame {
         findCompleted = true;
     }
 
-    public void paint(Graphics g) {
+    @Override
+    public void paintComponent(Graphics g) {
         if (mazeObj == null || findCompleted) return;
 
         if (!gridDrawn) {
             gridDrawn = true;
-            super.paint(g);
+            super.paintComponent(g);
             if (!visualizeGen) {
                 generator.completeAllIterations();
                 endGen();
@@ -183,6 +180,6 @@ public class DisplayFrame extends JFrame {
     // @param   y   Y position of the point
     // @return  int Y position of where to draw
     private int getDrawYPos(int y) {
-        return y * blockSize + 35; // +35 because of Frame borders
+        return y * blockSize + 10; // +35 because of Frame borders
     }
 }

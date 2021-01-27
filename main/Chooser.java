@@ -7,15 +7,15 @@ import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-public class Chooser extends JFrame {
+public class Chooser extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    JSpinner rowSpinner, colSpinner, delaySpinner;
+    JSpinner rowSpinner, colSpinner, blockSizeSpinner, delaySpinner;
     JButton startGenBut, startFindBut, initBut;
     JComboBox<String> genChose, findChose;
     JCheckBox genCheck, findCheck;
@@ -23,14 +23,12 @@ public class Chooser extends JFrame {
     DisplayFrame df;
 
     public Chooser() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(6, 3, 5, 5));
-        setSize(400, 250);
-
+        setLayout(new GridLayout(7, 3, 5, 5));
         MyActionListener mal = new MyActionListener();
 
         rowSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
         colSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
+        blockSizeSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
         delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.01));
 
         initBut = new JButton("Set Values");
@@ -50,14 +48,14 @@ public class Chooser extends JFrame {
         startGenBut.addActionListener(mal);
         startFindBut.addActionListener(mal);
 
-        add(new JLabel("Rows"));        add(rowSpinner);    add(new JLabel());
-        add(new JLabel("Columns"));     add(colSpinner);    add(new JLabel());
-        add(new JLabel("Generator"));   add(genChose);      add(genCheck);
-        add(new JLabel("Solver"));      add(findChose);     add(findCheck);
-        add((new JLabel("Delay")));     add(delaySpinner);  add(new JLabel("seconds"));
-        add(initBut);                   add(startGenBut);   add(startFindBut);
+        add(new JLabel("Rows"));        add(rowSpinner);        add(new JLabel());
+        add(new JLabel("Columns"));     add(colSpinner);        add(new JLabel());
+        add(new JLabel("Cell Size"));   add(blockSizeSpinner);  add(new JLabel());
+        add(new JLabel("Generator"));   add(genChose);          add(genCheck);
+        add(new JLabel("Solver"));      add(findChose);         add(findCheck);
+        add((new JLabel("Delay")));     add(delaySpinner);      add(new JLabel("seconds"));
+        add(initBut);                   add(startGenBut);       add(startFindBut);
 
-        setVisible(true);
         df = getNewDisplayFrame();
     }
 
