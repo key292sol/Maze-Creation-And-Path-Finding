@@ -9,7 +9,6 @@ public abstract class MazeSolver extends Maze {
 
     // @param   gen The generator which created the maze to solve
     public void setGenerator(MazeGenerator gen) {
-        this.blockSize = gen.blockSize;
         this.maze = gen.maze;
 
         // start at top left and end at bottom right

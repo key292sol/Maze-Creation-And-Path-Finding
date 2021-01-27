@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics;
+import java.awt.Color;
 import java.lang.reflect.*;
 
 import javax.swing.JFrame;
@@ -15,6 +16,7 @@ public class DisplayFrame extends JFrame {
     private Chooser ch;
 
     private int rows, cols, delay;
+    private int blockSize;
     private boolean gridDrawn, genCompleted, findCompleted;
     private boolean visualizeGen, visualizeFind, visualize;
 
@@ -42,6 +44,10 @@ public class DisplayFrame extends JFrame {
         genCompleted = false;
         findCompleted = false;
         visualize = visualizeGen;
+
+        // The blockSize shouldn't be less then 5
+        blockSize = Math.min(Maze.frameHeight, Maze.frameWidth) / Math.max(rows, cols);
+        blockSize = (blockSize < 5) ? 5 : blockSize;
 
         try {
             Class<?> class1 = Class.forName(Options.getGenClassFromIndex(ch.genChose.getSelectedIndex()));
@@ -106,16 +112,16 @@ public class DisplayFrame extends JFrame {
 
         if (genCompleted && solver.finished) {
             solver.lastPathCell();
-            solver.drawCell(g, solver.current);
+            drawCell(g, solver.current);
             if (solver.current.last == solver.start) endSolve();
             repaint();
         } else {
             if (mazeObj.current != solver.dest && mazeObj.current != solver.start) mazeObj.current.color = Maze.VISITED_COLOR;
-            mazeObj.drawCell(g, mazeObj.current);
+            drawCell(g, mazeObj.current);
             mazeObj.nextIteration();
             if (!mazeObj.finished) {
                 for (Cell c : mazeObj.changedCells) {
-                    mazeObj.drawCell(g, c);
+                    drawCell(g, c);
                 }
                 repaint();
             } else if (!genCompleted) {
@@ -135,8 +141,48 @@ public class DisplayFrame extends JFrame {
     public void drawWholeGrid(Graphics g) {
         for (Cell[] cells: mazeObj.maze) {
             for (Cell cell : cells) {
-                mazeObj.drawCell(g, cell);
+                drawCell(g, cell);
             }
         }
+    }
+
+    /*
+     * @param   g       The Graphics object on which you need to draw cell
+     * @param   cell    The cell needed to be drawn
+     */
+    public void drawCell(Graphics g, Cell cell) {
+        // Draw the rectangle/square shape of the cell
+        g.setColor(cell.color);
+        g.fillRect(getDrawXPos(cell.col) + 1, getDrawYPos(cell.row) + 1, blockSize, blockSize);
+
+        // Draw walls
+        g.setColor(Color.BLACK);
+        int[][] walls = {                                                               // x1, y1, x2, y2 positions
+                { (cell.col),     (cell.row),     (cell.col + 1), (cell.row)     },     // top wall
+                { (cell.col + 1), (cell.row),     (cell.col + 1), (cell.row + 1) },     // right wall
+                { (cell.col),     (cell.row + 1), (cell.col + 1), (cell.row + 1) },     // bottom wall
+                { (cell.col),     (cell.row),     (cell.col),     (cell.row + 1) }      // left wall
+        };
+
+        // If there exists a wall there, then draw a line
+        // representing the wall
+        for (int i = 0; i < walls.length; i++) {
+            if (cell.walls[i]) {
+                g.drawLine(getDrawXPos(walls[i][0]), getDrawYPos(walls[i][1]), getDrawXPos(walls[i][2]),
+                        getDrawYPos(walls[i][3]));
+            }
+        }
+    }
+
+    // @param   x   X position of the point
+    // @return  int X position of where to draw
+    private int getDrawXPos(int x) {
+        return x * blockSize + 10; // +10 because of Frame borders
+    }
+
+    // @param   y   Y position of the point
+    // @return  int Y position of where to draw
+    private int getDrawYPos(int y) {
+        return y * blockSize + 35; // +35 because of Frame borders
     }
 }

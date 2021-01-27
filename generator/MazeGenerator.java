@@ -14,9 +14,6 @@ public abstract class MazeGenerator extends Maze {
     }
 
     public MazeGenerator(int row, int col) {
-        // The blockSize shouldn't be less then 5
-        blockSize = Math.min(Maze.frameHeight, Maze.frameWidth) / Math.max(row, col);
-        blockSize = (blockSize < 5) ? 5 : blockSize;
 
         // Initializing the maze
         maze = new Cell[row][col];
