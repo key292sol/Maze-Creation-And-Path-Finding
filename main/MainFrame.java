@@ -25,7 +25,6 @@ public class MainFrame extends JFrame {
         ch.setDisplayer(df);
         
         JScrollPane jsp = new JScrollPane(df);
-        df.setScollPane(jsp);
         jsp.setBorder(new LineBorder(Color.BLACK, 2));
         jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

@@ -3,21 +3,23 @@ package main;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.lang.reflect.*;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import generator.*;
 import solver.*;
 import maze.*;
 
-// TODO: Fix bug: JComponents being drawn over DisplayFrame Panel
 public class DisplayFrame extends JPanel {
     private static final long serialVersionUID = 1L;
 
     private Chooser ch;
+    private Timer repaintTimer;
 
-    private int rows, cols, delay;
     private int blockSize;
     private boolean gridDrawn, genCompleted, findCompleted;
     private boolean visualizeGen, visualizeFind, visualize;
@@ -28,15 +30,21 @@ public class DisplayFrame extends JPanel {
 
     public DisplayFrame(Chooser ch) {
         this.ch = ch;
+        repaintTimer = new Timer(0, new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                repaint();
+            }
+        });
+        repaintTimer.setRepeats(false);
     }
 
     public void init() {
-        rows = (Integer)ch.rowSpinner.getValue();
-        cols = (Integer)ch.colSpinner.getValue();
+        int rows  = (Integer) ch.rowSpinner.getValue();
+        int cols  = (Integer) ch.colSpinner.getValue();
         blockSize = (Integer) ch.blockSizeSpinner.getValue();
-        double d = (Double)ch.delaySpinner.getValue();
-        delay = (int) (d * 1000);
-        visualizeGen = ch.genCheck.isSelected();
+        double d  = (Double)  ch.delaySpinner.getValue();
+        repaintTimer.setInitialDelay((int) (d * 1000));
+        visualizeGen  = ch.genCheck.isSelected();
         visualizeFind = ch.findCheck.isSelected();
 
         gridDrawn = false;
@@ -70,6 +78,7 @@ public class DisplayFrame extends JPanel {
     }
 
     private void endGen() {
+        repaintTimer.stop();
         visualize = visualizeFind;
         genCompleted = true;
         ch.genComplete();
@@ -78,6 +87,7 @@ public class DisplayFrame extends JPanel {
     }
 
     private void endSolve() {
+        repaintTimer.stop();
         findCompleted = true;
     }
 
@@ -85,6 +95,7 @@ public class DisplayFrame extends JPanel {
     public void paintComponent(Graphics g) {
         if (mazeObj == null || findCompleted) return;
 
+        super.paintComponent(g);
         if (!gridDrawn) {
             gridDrawn = true;
             super.paintComponent(g);
@@ -92,47 +103,29 @@ public class DisplayFrame extends JPanel {
                 generator.completeAllIterations();
                 endGen();
             }
-            drawWholeGrid(g);
-            return;
-        }
-
-        if (!visualize) {
+        } else if (!visualize) {
             mazeObj.completeAllIterations();
             if (!genCompleted) {
                 endGen();
             } else {
                 endSolve();
             }
-            drawWholeGrid(g);
-            return;
-        }
-
-        if (genCompleted && solver.finished) {
+        } else if (genCompleted && solver.finished) {
             solver.lastPathCell();
-            drawCell(g, solver.current);
             if (solver.current.last == solver.start) endSolve();
-            repaint();
+            repaintTimer.start();
         } else {
-            if (mazeObj.current != solver.dest && mazeObj.current != solver.start) mazeObj.current.color = Maze.VISITED_COLOR;
-            drawCell(g, mazeObj.current);
             mazeObj.nextIteration();
             if (!mazeObj.finished) {
-                for (Cell c : mazeObj.changedCells) {
-                    drawCell(g, c);
-                }
-                repaint();
+                repaintTimer.start();
             } else if (!genCompleted) {
                 endGen();
-                drawWholeGrid(g);
             } else {
-                repaint();
+                repaintTimer.start();
             }
         }
 
-        try {
-            Thread.sleep(delay);
-        } catch (Exception e) {
-        }
+        drawWholeGrid(g);
     }
 
     public void drawWholeGrid(Graphics g) {
@@ -150,7 +143,7 @@ public class DisplayFrame extends JPanel {
     public void drawCell(Graphics g, Cell cell) {
         // Draw the rectangle/square shape of the cell
         g.setColor(cell.color);
-        g.fillRect(getDrawXPos(cell.col) + 1, getDrawYPos(cell.row) + 1, blockSize, blockSize);
+        g.fillRect(getDrawXPos(cell.col), getDrawYPos(cell.row), blockSize, blockSize);
 
         // Draw walls
         g.setColor(Color.BLACK);
