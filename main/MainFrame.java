@@ -21,6 +21,15 @@ public class MainFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         Chooser ch = new Chooser();
+        DisplayFrame df = new DisplayFrame(ch);
+        ch.setDisplayer(df);
+        
+        JScrollPane jsp = new JScrollPane(df);
+        df.setScollPane(jsp);
+        jsp.setBorder(new LineBorder(Color.BLACK, 2));
+        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+
         
         setLayout(gbl);
         
@@ -43,10 +52,6 @@ public class MainFrame extends JFrame {
         gbc.weighty = 1;
         gbc.weightx = 1;
         gbc.insets = new Insets(10, 10, 10, 10);
-        JScrollPane jsp = new JScrollPane(ch.df);
-        jsp.setBorder(new LineBorder(Color.BLACK, 2));
-        jsp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        jsp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(jsp, gbc);
         
         setVisible(true);

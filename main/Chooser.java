@@ -15,12 +15,13 @@ import javax.swing.SpinnerNumberModel;
 public class Chooser extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    JSpinner rowSpinner, colSpinner, blockSizeSpinner, delaySpinner;
-    JButton startGenBut, startFindBut, initBut;
-    JComboBox<String> genChose, findChose;
-    JCheckBox genCheck, findCheck;
+    private DisplayFrame df;
+    
+    public JSpinner rowSpinner, colSpinner, blockSizeSpinner, delaySpinner;
+    public JButton startGenBut, startFindBut, initBut;
+    public JComboBox<String> genChose, findChose;
+    public JCheckBox genCheck, findCheck;
 
-    DisplayFrame df;
 
     public Chooser() {
         setLayout(new GridLayout(7, 3, 5, 5));
@@ -55,8 +56,10 @@ public class Chooser extends JPanel {
         add(new JLabel("Solver"));      add(findChose);         add(findCheck);
         add((new JLabel("Delay")));     add(delaySpinner);      add(new JLabel("seconds"));
         add(initBut);                   add(startGenBut);       add(startFindBut);
+    }
 
-        df = getNewDisplayFrame();
+    public void setDisplayer(DisplayFrame disp) {
+        df = disp;
     }
 
     public void initGenChose() {
@@ -71,10 +74,6 @@ public class Chooser extends JPanel {
         for (String str : Options.getSolverListOptions()) {
             findChose.addItem(str);
         }
-    }
-
-    private DisplayFrame getNewDisplayFrame(){
-        return new DisplayFrame(this);
     }
 
     public void genComplete() {
