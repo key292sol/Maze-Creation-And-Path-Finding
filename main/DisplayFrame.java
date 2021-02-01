@@ -6,7 +6,10 @@ import java.awt.Dimension;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -16,12 +19,15 @@ import maze.*;
 
 public class DisplayFrame extends JPanel {
     private static final long serialVersionUID = 1L;
+    private static final int PADDING = 10;
+
+    private String imgName;
 
     private Chooser ch;
     private Timer repaintTimer;
 
     private int blockSize;
-    private boolean gridDrawn, genCompleted, findCompleted;
+    private boolean draw, gridDrawn, genCompleted;
     private boolean visualizeGen, visualizeFind, visualize;
 
     private MazeGenerator generator;
@@ -30,12 +36,13 @@ public class DisplayFrame extends JPanel {
 
     public DisplayFrame(Chooser ch) {
         this.ch = ch;
+        draw = false;
         repaintTimer = new Timer(0, new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 repaint();
             }
         });
-        repaintTimer.setRepeats(false);
+        // repaintTimer.setRepeats(false);
     }
 
     public void init() {
@@ -43,13 +50,14 @@ public class DisplayFrame extends JPanel {
         int cols  = (Integer) ch.colSpinner.getValue();
         blockSize = (Integer) ch.blockSizeSpinner.getValue();
         double d  = (Double)  ch.delaySpinner.getValue();
-        repaintTimer.setInitialDelay((int) (d * 1000));
+        repaintTimer.setDelay((int) (d * 1000));
         visualizeGen  = ch.genCheck.isSelected();
         visualizeFind = ch.findCheck.isSelected();
+        imgName = ch.imageName.getText().trim();
 
+        draw = true;
         gridDrawn = false;
         genCompleted = false;
-        findCompleted = false;
         visualize = visualizeGen;
 
         try {
@@ -69,11 +77,14 @@ public class DisplayFrame extends JPanel {
         }
 
         mazeObj = generator;
-        setPreferredSize(new Dimension(rows * blockSize, cols * blockSize));
+        setPreferredSize(new Dimension(getDrawXPos(cols) + PADDING, getDrawYPos(rows) + PADDING));
+        revalidate();
         repaint();
     }
 
     public void doDraw() {
+        draw = true;
+        repaintTimer.start();
         repaint();
     }
 
@@ -84,25 +95,46 @@ public class DisplayFrame extends JPanel {
         ch.genComplete();
         solver.setGenerator(generator);
         mazeObj = solver;
+        draw = false;
+        makeImage("-gen");
     }
 
     private void endSolve() {
         repaintTimer.stop();
-        findCompleted = true;
+        draw = false;
+        makeImage("-solved");
+    }
+
+    private void makeImage(String suffix) {
+        if (imgName.length() != 0) {
+            try {
+                BufferedImage img = new BufferedImage(getDrawXPos(mazeObj.maze[0].length) + PADDING, getDrawYPos(mazeObj.maze.length) + PADDING, BufferedImage.TYPE_INT_RGB);
+                Graphics g = img.getGraphics();
+                drawWholeGrid(g);
+                File opFile = new File(imgName + suffix + ".png");
+                ImageIO.write(img, "png", opFile);
+            } catch (Exception e) {
+                System.out.println("Exception occured while creating image");
+            }
+        }
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        if (mazeObj == null || findCompleted) return;
-
+        if (mazeObj == null) return;
+        
         super.paintComponent(g);
+        if (!draw) {
+            drawWholeGrid(g);
+            return;
+        }
         if (!gridDrawn) {
             gridDrawn = true;
-            super.paintComponent(g);
             if (!visualizeGen) {
                 generator.completeAllIterations();
                 endGen();
             }
+            draw = false;
         } else if (!visualize) {
             mazeObj.completeAllIterations();
             if (!genCompleted) {
@@ -113,15 +145,15 @@ public class DisplayFrame extends JPanel {
         } else if (genCompleted && solver.finished) {
             solver.lastPathCell();
             if (solver.current.last == solver.start) endSolve();
-            repaintTimer.start();
+            // repaintTimer.start();
         } else {
             mazeObj.nextIteration();
             if (!mazeObj.finished) {
-                repaintTimer.start();
+                // repaintTimer.start();
             } else if (!genCompleted) {
                 endGen();
             } else {
-                repaintTimer.start();
+                // repaintTimer.start();
             }
         }
 
@@ -167,12 +199,12 @@ public class DisplayFrame extends JPanel {
     // @param   x   X position of the point
     // @return  int X position of where to draw
     private int getDrawXPos(int x) {
-        return x * blockSize + 10; // +10 because of Frame borders
+        return x * blockSize + PADDING;
     }
 
     // @param   y   Y position of the point
     // @return  int Y position of where to draw
     private int getDrawYPos(int y) {
-        return y * blockSize + 10; // +35 because of Frame borders
+        return y * blockSize + PADDING;
     }
 }

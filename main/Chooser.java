@@ -10,6 +10,7 @@ import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 public class Chooser extends JPanel {
@@ -21,15 +22,16 @@ public class Chooser extends JPanel {
     public JButton startGenBut, startFindBut, initBut;
     public JComboBox<String> genChose, findChose;
     public JCheckBox genCheck, findCheck;
+    public JTextField imageName;
 
 
     public Chooser() {
-        setLayout(new GridLayout(7, 3, 5, 5));
+        setLayout(new GridLayout(8, 3, 5, 5));
         MyActionListener mal = new MyActionListener();
 
-        rowSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
-        colSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
-        blockSizeSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 150, 1));
+        rowSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 1000, 1));
+        colSpinner = new JSpinner(new SpinnerNumberModel(10, 5, 1000, 1));
+        blockSizeSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 50, 1));
         delaySpinner = new JSpinner(new SpinnerNumberModel(0, 0, 5, 0.01));
 
         initBut = new JButton("Set Values");
@@ -38,6 +40,8 @@ public class Chooser extends JPanel {
 
         genCheck = new JCheckBox("Show generation", true);
         findCheck = new JCheckBox("Show solving", true);
+
+        imageName = new JTextField();
 
         initGenChose();
         initFindChose();
@@ -55,6 +59,7 @@ public class Chooser extends JPanel {
         add(new JLabel("Generator"));   add(genChose);          add(genCheck);
         add(new JLabel("Solver"));      add(findChose);         add(findCheck);
         add((new JLabel("Delay")));     add(delaySpinner);      add(new JLabel("seconds"));
+        add(new JLabel("Image name"));  add(imageName);         add(new JLabel());
         add(initBut);                   add(startGenBut);       add(startFindBut);
     }
 
