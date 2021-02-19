@@ -33,9 +33,11 @@ public class BFS extends MazeSolver {
         }
 
         for (Cell cell : current.neighbors) {
-            cellQueue.add(cell);
-            cell.neighbors.remove(current);
-            cell.last = current;
+            if (!cell.visited) {
+                cell.visited = true;
+                cellQueue.add(cell);
+                cell.last = current;
+            }
         }
 
         colorCurrentCell(Maze.CURR_CELL_COLOR);

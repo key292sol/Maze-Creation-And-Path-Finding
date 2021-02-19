@@ -37,7 +37,8 @@ public class AStar extends MazeSolver {
         super.nextIteration();
         
         AStarCost curCost = pqueue.remove();
-        current = getCellAt(curCost.row, curCost.col);
+        current = curCost.myCell;
+        current.visited = true;
         
         if (current == dest) {
             finished = true;
@@ -52,6 +53,10 @@ public class AStar extends MazeSolver {
         AStarCost cost;
         for (Cell cell : current.neighbors) {
             // Cost object for Priority queue
+            if (cell.visited) {
+                continue;
+            }
+            
             cost = new AStarCost(cell);
 
             if (!useEuclidean) {
@@ -62,7 +67,6 @@ public class AStar extends MazeSolver {
 
             cell.cost = cost.fcost;
             cell.last = current;
-            cell.neighbors.remove(current);     // So that we don't calculate the cost again in a future iteration
             pqueue.add(cost);
         }
     }
@@ -70,9 +74,11 @@ public class AStar extends MazeSolver {
     // For stooring the costs of cells
     class AStarCost implements Comparable<AStarCost> {
         int row, col;
+        Cell myCell;
         int gcost, hcost, fcost;
     
         AStarCost(Cell me) {
+            myCell = me;
             this.row = me.row;
             this.col = me.col;
         }

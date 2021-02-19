@@ -16,35 +16,43 @@ public class OptimizedDfs extends MazeSolver {
         if (current == dest) {
             finished = true;
             return;
-        } else if (current.neighbors.size() == 0) {
+        }
+
+        current.visited = true;
+        calcNeighborsCost(current);
+        Cell selected = getMinCostNeighbor();
+        if (selected == null) {
             current = current.last;
             colorCurrentCell(Maze.CURR_CELL_COLOR);
             return;
         }
 
-        calcNeighborsCost(current);
-        Cell selected = removeMinCostNeighbor();
-        selected.neighbors.remove(current);
         selected.last = current;
-
         current = selected;
         colorCurrentCell(Maze.CURR_CELL_COLOR);
     }
 
     private void calcNeighborsCost(Cell cell) {
         for (Cell n : cell.neighbors) {
+            if(!n.visited)
             n.cost = Math.abs(dest.row - n.row) + Math.abs(dest.col - n.col);
         }
     }
 
-    private Cell removeMinCostNeighbor() {
-        int minIndex = 0, minCost = current.neighbors.get(0).cost;
-        for (int i = 1; i < current.neighbors.size(); i++) {
-            if (current.neighbors.get(i).cost < minCost) {
-                minCost = current.neighbors.get(i).cost;
-                minIndex = i;
+    private Cell getMinCostNeighbor() {
+        int index = 0, minIndex = -1, minCost = Integer.MAX_VALUE;
+        while (index < current.neighbors.size()) {
+            Cell c = current.neighbors.get(index);
+            if (!c.visited && c.cost < minCost) {
+                minCost = c.cost;
+                minIndex = index;
             }
+            index++;
         }
-        return current.neighbors.remove(minIndex);
+
+        if (minIndex == -1) {
+            return null;
+        }
+        return current.neighbors.get(minIndex);
     }
 }

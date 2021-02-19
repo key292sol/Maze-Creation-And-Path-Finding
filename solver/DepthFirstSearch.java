@@ -10,26 +10,33 @@ import maze.*;
 public class DepthFirstSearch extends MazeSolver {
     public void nextIteration() {
         super.nextIteration();
+        current.visited = true;
 
         // If destination is reached then solving is finished
-        // Else if the cell has no neighbors then we reached a dead end
+        // If the cell has no neighbors then we reached a dead end
         if (current == dest) {
             finished = true;
             return;
-        } else if (current.neighbors.size() == 0) {
-            current = current.last;
-            colorCurrentCell(Maze.CURR_CELL_COLOR);
-            return;
         }
 
-        // Cell has unvisited neighbors
-        // Go to the first neighbor
-        Cell selected = current.neighbors.remove(0);
-        selected.neighbors.remove(current);
-        selected.last = current;
+        int index = 0;
+        while (index < current.neighbors.size() && current.neighbors.get(index).visited) {
+            index++;
+        }
 
-        current = selected;
-        colorCurrentCell(Maze.CURR_CELL_COLOR);
+        if (index == current.neighbors.size()) {
+            current = current.last;
+            colorCurrentCell(Maze.CURR_CELL_COLOR);
+        } else {
+            // Cell has unvisited neighbors
+            // Go to the first neighbor
+            Cell selected = current.neighbors.get(index);
+            // selected.neighbors.remove(current);
+            selected.last = current;
+    
+            current = selected;
+            colorCurrentCell(Maze.CURR_CELL_COLOR);
+        }
     }
 }
 
