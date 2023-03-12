@@ -33,7 +33,8 @@ public class MainFrame extends JFrame {
         setLayout(gbl);
         
         gbc.gridx = 0;
-        
+        gbc.weightx = 0.001;
+
         gbc.gridy = 0;
         gbc.weighty = 0.1;
         JLabel lab = new JLabel("Display on the panel", JLabel.CENTER);

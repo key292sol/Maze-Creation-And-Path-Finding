@@ -51,19 +51,10 @@ public abstract class MazeGenerator extends Maze {
     // @param   cell    The cell whose neighbor is to be returned
     // @return  Cell    A random neighbor or null if no neighbors are left unvisited
     public Cell getRandomNeighbor(Cell cell) {
-        // For checking which neighbors have been visited
-        boolean visitedN[] = new boolean[cell.neighbors.size()];
-        int i = 0;
-        while (i < cell.neighbors.size()) {
-            visitedN[i] = cell.neighbors.get(i).visited;
-            i++;
-        }
-
         // If a neighbor has been visited then remove it
         // We don't need to go to alreaady visited neighbors
-        while (i > 0) {
-            i--;
-            if (visitedN[i]) {
+        for (int i = cell.neighbors.size() - 1; i >= 0; i--) {
+            if (cell.neighbors.get(i).visited) {
                 cell.neighbors.remove(i);
             }
         }
