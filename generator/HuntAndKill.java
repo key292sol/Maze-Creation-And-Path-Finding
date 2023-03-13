@@ -46,6 +46,10 @@ public class HuntAndKill extends MazeGenerator {
     }
 
     private void nextPosition() {
+        if (current != getCellAt(curRow, curCol)) {
+            return;
+        }
+
         curCol++;
         if (curCol >= maze[0].length) {
             curRow++;
