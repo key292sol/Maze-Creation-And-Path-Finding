@@ -1,7 +1,6 @@
 # Maze Creation and Path Finding
 
 This is a repository to store the implementations of various maze generation and maze solving algorithms.
-I haven't tried running it outside VS Code.
 
 The main method can be found in main/Main.java class
 
@@ -25,10 +24,10 @@ The main method can be found in main/Main.java class
 ## Notes
 
 ### Random Prim's:
-I've implemented a modified version of it which uses cells instead of walls.
+Implemented a modified version of it which uses cells instead of walls.
 
 ### Binary Tree
 It is implemented so that it carves a passage to the left or above the current cell.
 
 ### Depth First Search
-Instead of using a stack, I have stored the backtracking info in the cells itself.
+Instead of using a stack, the backtracking data is stored in the cells themself.
