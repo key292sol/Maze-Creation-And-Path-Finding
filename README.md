@@ -17,6 +17,14 @@ The main method can be found in main/Main.java class
 - Optimised DFS
 - A* (A-star) path finding
 
+## Screenshots:
+
+![Starting screen](/screenshots/Screenshot%20(1).png?raw=true "Starting screen")
+![Grid](/screenshots/Screenshot%20(2).png?raw=true "Initialse grid")
+![Maze created](/screenshots/Screenshot%20(3).png?raw=true "Maze created")
+![Path found](/screenshots/Screenshot%20(4).png?raw=true "Path found")
+
+
 ## Useful Links
 - [Wikipedia - Maze generation algorithms](https://en.m.wikipedia.org/wiki/Maze_generation_algorithm)
 - [Wikipedia - A* search algorithm](https://en.m.wikipedia.org/wiki/A*_search_algorithm)
